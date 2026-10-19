@@ -2,6 +2,7 @@ package uk.co.tdsstudios.noterly.wear.ui
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
@@ -32,10 +33,7 @@ fun ScrollingScreen(
     content: ScalingLazyListScope.() -> Unit,
 ) {
     val listState = rememberScalingLazyListState()
-    ScreenScaffold(
-        scrollState = listState,
-        edgeButton = edgeButton?.let { button -> { button() } },
-    ) { contentPadding ->
+    val column: @Composable (PaddingValues) -> Unit = { contentPadding ->
         ScalingLazyColumn(
             modifier = Modifier.fillMaxSize(),
             state = listState,
@@ -44,6 +42,12 @@ fun ScrollingScreen(
             if (title != null) item { ListHeader { Text(title) } }
             content()
         }
+    }
+
+    if (edgeButton != null) {
+        ScreenScaffold(scrollState = listState, edgeButton = { edgeButton() }) { contentPadding -> column(contentPadding) }
+    } else {
+        ScreenScaffold(scrollState = listState) { contentPadding -> column(contentPadding) }
     }
 }
 
