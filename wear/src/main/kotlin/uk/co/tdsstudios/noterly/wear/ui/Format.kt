@@ -24,6 +24,16 @@ object Format {
         return DateTimeFormatter.ofPattern(DateFormat.getBestDateTimePattern(locale, skeleton), locale).format(dateTime)
     }
 
+    /** For short complications, which fit about 7 characters: "14:30" today, "Wed" this week, otherwise "21 Oct". */
+    fun shortTime(context: Context, dateTime: LocalDateTime): String {
+        val date = dateTime.toLocalDate()
+        val today = LocalDate.now()
+        if (date == today) return time(context, dateTime)
+        val skeleton = if (date.isAfter(today) && date.isBefore(today.plusDays(7))) "EEE" else "dMMM"
+        val locale = Locale.getDefault()
+        return DateTimeFormatter.ofPattern(DateFormat.getBestDateTimePattern(locale, skeleton), locale).format(dateTime)
+    }
+
     fun clock(context: Context, millis: Long): String =
         time(context, DartTime.fromInstant(java.time.Instant.ofEpochMilli(millis)))
 
