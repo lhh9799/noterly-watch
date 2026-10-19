@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Wording follows the phone app's English strings; the phone app has no Korean translation either -->
+    <string name="tile_label">Noterly</string>
+    <string name="complication_label">Next reminder</string>
+
+    <string name="list_title">Reminders</string>
+    <string name="list_empty">No reminders</string>
+    <string name="list_last_synced">Last synced %1$s</string>
+    <string name="list_never_synced">Not synced with the phone yet</string>
+    <string name="list_archive">Archive</string>
+    <string name="list_new">New note</string>
+    <string name="list_now">Now</string>
+    <string name="list_snoozed_until">Snoozed until %1$s</string>
+    <string name="list_waiting_for_phone">Waiting for phone</string>
+
+    <string name="detail_done">Mark as done</string>
+    <string name="detail_snooze">Snooze</string>
+    <string name="detail_edit">Edit</string>
+    <string name="detail_delete">Delete</string>
+    <string name="detail_restore">Restore</string>
+    <string name="detail_not_found">This reminder is no longer in the list</string>
+    <string name="detail_immediate">Shown immediately</string>
+
+    <string name="archive_title">Archive</string>
+    <string name="archive_empty">Nothing done yet</string>
+
+    <string name="edit_new_title">New note</string>
+    <string name="edit_title">Edit</string>
+    <string name="edit_title_hint">Title</string>
+    <string name="edit_title_empty">Tap to enter a title</string>
+    <string name="edit_time">Time</string>
+    <string name="edit_colour">Colour</string>
+    <string name="edit_colour_hint">Tap for another colour</string>
+    <string name="edit_repeat">Repeat</string>
+    <string name="edit_save">Save</string>
+    <string name="edit_create">Create</string>
+
+    <string name="time_now">Now</string>
+    <string name="time_30_minutes">In 30 minutes</string>
+    <string name="time_1_hour">In 1 hour</string>
+    <string name="time_pick">Choose a time</string>
+    <string name="time_keep">Keep %1$s</string>
+
+    <string name="repeat_none">Don\'t repeat</string>
+    <string name="repeat_hourly">Hourly</string>
+    <string name="repeat_daily">Daily</string>
+    <string name="repeat_weekly">Weekly</string>
+    <string name="repeat_monthly">Monthly</string>
+    <string name="repeat_yearly">Yearly</string>
+    <string name="repeat_every">Every %1$d</string>
+    <string name="repeat_days_of_week">Days of the week</string>
+    <string name="repeat_done">Done</string>
+
+    <string name="delete_confirm">Delete this reminder?</string>
+    <string name="delete_cancel">Cancel</string>
+
+    <string name="notification_channel">Reminders</string>
+    <string name="notification_channel_description">Reminders shown by the watch while the phone is not connected</string>
+    <string name="permission_needed">Allow notifications so reminders can be shown while the phone is away</string>
+
+    <string name="tile_empty">No upcoming reminders</string>
+    <string name="tile_new">New</string>
+</resources>
