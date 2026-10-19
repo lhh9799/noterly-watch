@@ -28,7 +28,7 @@ import uk.co.tdsstudios.noterly.wearshared.NoteItem
 
 @Composable
 fun DetailScreen(
-    item: NoteItem?,
+    note: NoteItem?,
     waitingForPhone: Boolean,
     onDone: () -> Unit,
     onSnooze: () -> Unit,
@@ -37,7 +37,7 @@ fun DetailScreen(
     onRestore: () -> Unit,
 ) {
     val context = LocalContext.current
-    if (item == null) {
+    if (note == null) {
         ScrollingScreen { item { CenteredNote(stringResource(R.string.detail_not_found)) } }
         return
     }
@@ -45,28 +45,28 @@ fun DetailScreen(
     ScrollingScreen {
         item {
             Row(horizontalArrangement = Arrangement.spacedBy(6.dp), verticalAlignment = Alignment.CenterVertically) {
-                ColourDot(item.colour, 12.dp)
-                Text(item.title, style = MaterialTheme.typography.titleMedium, textAlign = TextAlign.Center)
+                ColourDot(note.colour, 12.dp)
+                Text(note.title, style = MaterialTheme.typography.titleMedium, textAlign = TextAlign.Center)
             }
         }
-        if (item.body.isNotBlank()) {
-            item { Text(item.body, style = MaterialTheme.typography.bodyMedium, modifier = Modifier.fillMaxWidth(), textAlign = TextAlign.Center) }
+        if (note.body.isNotBlank()) {
+            item { Text(note.body, style = MaterialTheme.typography.bodyMedium, modifier = Modifier.fillMaxWidth(), textAlign = TextAlign.Center) }
         }
         item {
-            val dateTime = DartTime.parseOrNull(item.dateTime)
+            val dateTime = DartTime.parseOrNull(note.dateTime)
             CenteredNote(if (dateTime == null) stringResource(R.string.detail_immediate) else Format.time(context, dateTime))
         }
-        DartTime.parseOrNull(item.snoozeDateTime)?.let { snoozed ->
+        DartTime.parseOrNull(note.snoozeDateTime)?.let { snoozed ->
             item { CenteredNote(stringResource(R.string.list_snoozed_until, Format.time(context, snoozed))) }
         }
-        if (item.isRepeating) {
-            item { CenteredNote(Format.repeatLabel(item)) }
+        if (note.isRepeating) {
+            item { CenteredNote(Format.repeatLabel(note)) }
         }
         if (waitingForPhone) {
             item { CenteredNote(stringResource(R.string.list_waiting_for_phone)) }
         }
 
-        if (item.archived) {
+        if (note.archived) {
             item {
                 Button(
                     onClick = onRestore,
@@ -94,7 +94,7 @@ fun DetailScreen(
             }
             item {
                 FilledTonalButton(
-                    onClick = { onEdit(item) },
+                    onClick = { onEdit(note) },
                     modifier = Modifier.fillMaxWidth(),
                     icon = { Icon(Icons.Filled.Edit, contentDescription = null) },
                     label = { Text(stringResource(R.string.detail_edit)) },

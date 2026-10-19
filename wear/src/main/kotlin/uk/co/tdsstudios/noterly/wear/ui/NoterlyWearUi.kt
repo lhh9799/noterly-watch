@@ -64,7 +64,7 @@ fun NoterlyWearUi(viewModel: WatchViewModel, openItem: MutableStateFlow<String?>
                 composable(Routes.DETAIL) { entry ->
                     val id = entry.arguments?.getString("id").orEmpty()
                     DetailScreen(
-                        item = view?.item(id),
+                        note = view?.item(id),
                         waitingForPhone = view?.pendingIds?.contains(id) == true,
                         onDone = {
                             viewModel.markDone(id)
