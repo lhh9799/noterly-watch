@@ -166,6 +166,19 @@ class WearRepository private constructor(private val context: Context) {
         store.addPending(command)
         send(command)
         refreshOutputs()
+        if (type == CommandType.CREATE || type == CommandType.UPDATE || type == CommandType.RESTORE) notifyIfImmediate(itemId)
+    }
+
+    /**
+     * The phone shows a reminder with no time as soon as it is saved. While the phone is away the watch does that
+     * itself, and tags it so the phone's copy is not bridged over again once it reconnects.
+     */
+    private suspend fun notifyIfImmediate(itemId: String) {
+        val view = current()
+        val item = view.item(itemId)
+        if (!WatchState.notifiesImmediately(item) || refreshConnection()) return
+        WatchNotifications.show(context, item!!, view.settings, null)
+        recordOwnNotification(itemId, null)
     }
 
     /**
@@ -193,8 +206,11 @@ class WearRepository private constructor(private val context: Context) {
         NextReminderComplicationService.requestUpdate(context)
     }
 
-    /** Records a send the watch notified by itself, so the phone's copy of it is not bridged over as well. */
-    suspend fun recordOwnNotification(itemId: String, dueMillis: Long) {
+    /**
+     * Records a send the watch notified by itself, so the phone's copy of it is not bridged over as well. [dueMillis]
+     * is null for an immediate reminder.
+     */
+    suspend fun recordOwnNotification(itemId: String, dueMillis: Long?) {
         val tags = store.addFiredTag(WatchState.bridgeTag(itemId, dueMillis))
         runCatching {
             BridgingManager.fromContext(context).setConfig(
