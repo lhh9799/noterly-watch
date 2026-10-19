@@ -23,22 +23,24 @@ class NextReminderComplicationService : SuspendingComplicationDataSourceService(
         val active = repository.current().active
         // The next scheduled one; immediate reminders have no time to show
         val next = active.firstOrNull { WatchState.nextDue(it) != null } ?: active.firstOrNull()
-        val time = next?.let { WatchState.nextDue(it) }?.let { Format.time(this, it) } ?: if (next != null) getString(R.string.list_now) else "—"
+        val due = next?.let { WatchState.nextDue(it) }
+        val time = due?.let { Format.time(this, it) } ?: if (next != null) getString(R.string.list_now) else "—"
+        val shortTime = due?.let { Format.shortTime(this, it) } ?: time
         val title = next?.title ?: getString(R.string.tile_empty)
         val tap = PendingIntent.getActivity(
             this, 0,
             next?.let { MainActivity.detailIntent(this, it.id) } ?: MainActivity.newNoteIntent(this),
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
         )
-        return build(request.complicationType, time, title, tap)
+        return build(request.complicationType, time, shortTime, title, tap)
     }
 
-    override fun getPreviewData(type: ComplicationType): ComplicationData? = build(type, "09:00", "Gym", null)
+    override fun getPreviewData(type: ComplicationType): ComplicationData? = build(type, "09:00", "09:00", "Gym", null)
 
-    private fun build(type: ComplicationType, time: String, title: String, tap: PendingIntent?): ComplicationData? {
+    private fun build(type: ComplicationType, time: String, shortTime: String, title: String, tap: PendingIntent?): ComplicationData? {
         val description = PlainComplicationText.Builder("$time $title").build()
         return when (type) {
-            ComplicationType.SHORT_TEXT -> ShortTextComplicationData.Builder(PlainComplicationText.Builder(time).build(), description)
+            ComplicationType.SHORT_TEXT -> ShortTextComplicationData.Builder(PlainComplicationText.Builder(shortTime).build(), description)
                 .setTitle(PlainComplicationText.Builder(title).build())
                 .setTapAction(tap)
                 .build()
