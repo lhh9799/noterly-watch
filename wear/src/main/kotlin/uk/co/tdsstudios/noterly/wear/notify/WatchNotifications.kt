@@ -8,7 +8,6 @@ import android.content.Intent
 import androidx.core.app.NotificationCompat
 import uk.co.tdsstudios.noterly.wear.R
 import uk.co.tdsstudios.noterly.wear.ui.MainActivity
-import uk.co.tdsstudios.noterly.wearshared.DartTime
 import uk.co.tdsstudios.noterly.wearshared.NoteItem
 import uk.co.tdsstudios.noterly.wearshared.SnapshotSettings
 import uk.co.tdsstudios.noterly.wearshared.WatchState
@@ -18,6 +17,7 @@ object WatchNotifications {
     private const val CHANNEL_ID = "reminders"
     private const val EXTRA_DUE_MILLIS = "noterly.dueMillis"
     private const val EXTRA_ITEM_ID = "noterly.itemId"
+    private const val EXTRA_IMMEDIATE = "noterly.immediate"
 
     fun createChannel(context: Context) {
         val channel = NotificationChannel(CHANNEL_ID, context.getString(R.string.notification_channel), NotificationManager.IMPORTANCE_HIGH).apply {
@@ -27,7 +27,8 @@ object WatchNotifications {
         context.getSystemService(NotificationManager::class.java).createNotificationChannel(channel)
     }
 
-    fun show(context: Context, item: NoteItem, settings: SnapshotSettings, dueMillis: Long) {
+    /** Shows [item] for its send at [dueMillis], or, if null, as an immediate reminder shown now. */
+    fun show(context: Context, item: NoteItem, settings: SnapshotSettings, dueMillis: Long?) {
         val manager = context.getSystemService(NotificationManager::class.java)
         if (!manager.areNotificationsEnabled()) return
 
@@ -46,13 +47,13 @@ object WatchNotifications {
             // Same rule as the phone: only dismissible reminders can be swiped away, and only if allowed in Settings
             .setOngoing(!(settings.dismissibleEnabled && item.dismissible))
             .setAutoCancel(false)
-            .setWhen(dueMillis)
+            .setWhen(dueMillis ?: System.currentTimeMillis())
             .setShowWhen(true)
             .setLocalOnly(true)
             .setContentIntent(open)
             .addExtras(android.os.Bundle().apply {
                 putString(EXTRA_ITEM_ID, item.id)
-                putLong(EXTRA_DUE_MILLIS, dueMillis)
+                if (dueMillis == null) putBoolean(EXTRA_IMMEDIATE, true) else putLong(EXTRA_DUE_MILLIS, dueMillis)
             })
             .addAction(0, context.getString(R.string.detail_done), action(context, item.id, ReminderActionReceiver.ACTION_DONE))
             .addAction(0, context.getString(R.string.detail_snooze), action(context, item.id, ReminderActionReceiver.ACTION_SNOOZE))
@@ -67,17 +68,16 @@ object WatchNotifications {
 
     /**
      * Removes the watch's own notifications for reminders that were done, deleted or moved to a later time, for
-     * example on the phone after it reconnected.
+     * example on the phone after it reconnected. An immediate one stays until then, although it has no send time.
      */
     fun cancelStale(context: Context, items: List<NoteItem>) {
         val manager = context.getSystemService(NotificationManager::class.java)
         for (shown in manager.activeNotifications) {
             val extras = shown.notification.extras
             val itemId = extras.getString(EXTRA_ITEM_ID) ?: continue
-            val dueMillis = extras.getLong(EXTRA_DUE_MILLIS)
+            val dueMillis = if (extras.getBoolean(EXTRA_IMMEDIATE)) null else extras.getLong(EXTRA_DUE_MILLIS)
             val item = items.firstOrNull { it.id == itemId }
-            val due = item?.let { WatchState.nextDue(it) }?.let { DartTime.toEpochMillis(it) }
-            if (item == null || item.archived || due == null || due > dueMillis) manager.cancel(shown.id)
+            if (WatchState.ownNotificationStale(item, dueMillis, System.currentTimeMillis())) manager.cancel(shown.id)
         }
     }
 
