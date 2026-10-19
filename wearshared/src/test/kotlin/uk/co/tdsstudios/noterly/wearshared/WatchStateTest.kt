@@ -1,0 +1,134 @@
+package uk.co.tdsstudios.noterly.wearshared
+
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertNotEquals
+import org.junit.Assert.assertNull
+import org.junit.Assert.assertTrue
+import org.junit.Test
+import java.time.LocalDateTime
+import java.time.ZoneId
+
+class WatchStateTest {
+    private val zone = ZoneId.of("Asia/Seoul")
+    private val now = LocalDateTime.parse("2026-10-19T12:00:00")
+    private val weekly = RepetitionData.of(Repetition.WEEKLY, 1, listOf(1, 3, 5))
+
+    private val single = NoteItem(id = "a1b2c3d4-0000-4000-8000-000000000001", title = "Call mum", dateTime = "2026-10-19T18:00:00.000")
+    private val repeating = NoteItem(
+        id = "a1b2c3d4-0000-4000-8000-000000000002", title = "Gym", dateTime = "2026-10-19T09:00:00.000", repetitionData = weekly,
+    )
+    private val snapshot = Snapshot(rev = 7, items = listOf(single, repeating))
+
+    private fun command(type: String, item: NoteItem, payload: CommandPayload = CommandPayload(), at: LocalDateTime = now) =
+        Commands.new(type, item.id, snapshot.rev, at, payload)
+
+    @Test
+    fun doneArchivesASingleReminder() {
+        val items = WatchState.overlay(snapshot, listOf(command(CommandType.DONE, single)), zone)
+        assertTrue(items.first { it.id == single.id }.archived)
+        assertEquals(listOf(repeating.id), WatchState.activeSorted(items, zone).map { it.id })
+    }
+
+    @Test
+    fun doneMovesARepeatToTheNextSelectedWeekday() {
+        val done = command(CommandType.DONE, repeating, CommandPayload(seenDateTime = repeating.dateTime))
+        val item = WatchState.overlay(snapshot, listOf(done), zone).first { it.id == repeating.id }
+        assertEquals("2026-10-21T09:00:00.000", item.dateTime)
+        assertFalse(item.archived)
+        assertNull(item.snoozeDateTime)
+    }
+
+    @Test
+    fun aRepeatDoneOnBothSidesOnlyMovesOnce() {
+        // The phone already marked it as done and moved it on to Wednesday; the watch's command saw Monday
+        val phoneDone = snapshot.copy(items = listOf(single, repeating.copy(dateTime = "2026-10-21T09:00:00.000")))
+        val done = command(CommandType.DONE, repeating, CommandPayload(seenDateTime = repeating.dateTime))
+        val item = WatchState.overlay(phoneDone, listOf(done), zone).first { it.id == repeating.id }
+        assertEquals("2026-10-21T09:00:00.000", item.dateTime)
+    }
+
+    @Test
+    fun snoozeUsesThePhonesSnoozeLength() {
+        val withSettings = snapshot.copy(settings = SnapshotSettings(snoozeSeconds = 1800))
+        val item = WatchState.overlay(withSettings, listOf(command(CommandType.SNOOZE, single)), zone).first { it.id == single.id }
+        assertEquals("2026-10-19T12:30:00.000", item.snoozeDateTime)
+        assertEquals(LocalDateTime.parse("2026-10-19T12:30:00"), WatchState.fireTime(item, now, zone))
+    }
+
+    @Test
+    fun anUpdateOlderThanThePhonesEditIsDropped() {
+        val editedOnPhone = snapshot.copy(items = listOf(single.copy(updatedAt = "2026-10-19T12:05:00.000"), repeating))
+        val update = command(CommandType.UPDATE, single, CommandPayload(title = "Call dad", dateTime = single.dateTime))
+        assertEquals("Call mum", WatchState.overlay(editedOnPhone, listOf(update), zone).first { it.id == single.id }.title)
+        assertEquals("Call dad", WatchState.overlay(snapshot, listOf(update), zone).first { it.id == single.id }.title)
+    }
+
+    @Test
+    fun acknowledgedCommandsAreNotAppliedAgain() {
+        val done = command(CommandType.DONE, single)
+        val acked = snapshot.copy(rev = 8, appliedCommands = listOf(done.commandId))
+        assertEquals(setOf(done.commandId), WatchState.acknowledged(acked, listOf(done)))
+        assertFalse(WatchState.overlay(acked, listOf(done), zone).first { it.id == single.id }.archived)
+    }
+
+    @Test
+    fun createDeleteAndRestore() {
+        val created = Commands.new(CommandType.CREATE, "a1b2c3d4-0000-4000-8000-000000000003", 7, now,
+            CommandPayload(title = "Water plants", dateTime = "2026-10-19T13:00:00.000", colour = 0xFF4CAF50))
+        var items = WatchState.overlay(snapshot, listOf(created), zone)
+        assertEquals(listOf(single.id, created.itemId, repeating.id).sorted(), items.map { it.id }.sorted())
+        assertEquals(0xFF4CAF50, items.first { it.id == created.itemId }.colour)
+
+        items = WatchState.apply(items, command(CommandType.DELETE, single), snapshot.settings, zone)
+        assertFalse(items.any { it.id == single.id })
+
+        val archived = snapshot.copy(items = listOf(single.copy(archived = true, archivedDateTime = "2026-10-18T10:00:00.000")))
+        assertFalse(WatchState.overlay(archived, listOf(command(CommandType.RESTORE, single)), zone).first().archived)
+    }
+
+    @Test
+    fun activeListIsImmediateFirstThenByTime() {
+        val immediate = NoteItem(id = "i", title = "Now")
+        val later = NoteItem(id = "l", title = "Later", dateTime = "2026-10-20T08:00:00.000")
+        val snoozed = NoteItem(id = "s", title = "Snoozed", dateTime = "2026-10-19T08:00:00.000", snoozeDateTime = "2026-10-19T13:00:00.000")
+        val sorted = WatchState.activeSorted(listOf(later, snoozed, immediate, single), zone).map { it.id }
+        assertEquals(listOf("i", "s", single.id, "l"), sorted)
+    }
+
+    @Test
+    fun noOwnNotificationForPastOrImmediateItems() {
+        assertNull(WatchState.fireTime(NoteItem(id = "i", title = "Now"), now, zone))
+        assertNull(WatchState.fireTime(repeating, now, zone)) // Monday 09:00 already passed
+        assertEquals(LocalDateTime.parse("2026-10-19T18:00:00"), WatchState.fireTime(single, now, zone))
+    }
+
+    @Test
+    fun notificationIdsAreStableAndDistinct() {
+        assertEquals(WatchState.notificationId(single.id), WatchState.notificationId(single.id))
+        assertNotEquals(WatchState.notificationId(single.id), WatchState.notificationId(repeating.id))
+    }
+
+    @Test
+    fun timesRoundTripInDartFormat() {
+        assertEquals("2026-10-19T09:00:00.000", DartTime.format(LocalDateTime.parse("2026-10-19T09:00:00")))
+        assertEquals("2026-10-19T09:00:00.123456", DartTime.format(LocalDateTime.parse("2026-10-19T09:00:00.123456")))
+        assertEquals(LocalDateTime.parse("2026-10-19T09:00:00.123456"), DartTime.parse("2026-10-19T09:00:00.123456"))
+        assertEquals(LocalDateTime.parse("2026-10-19T09:00:00"), DartTime.parse("2026-10-19T00:00:00.000Z", zone))
+    }
+
+    @Test
+    fun snapshotJsonFromThePhoneParses() {
+        val json = """
+            {"schema":1,"rev":128,"generatedAt":"2026-10-19T09:00:00.000","settings":{"snoozeSeconds":3600,"dismissibleEnabled":true},
+             "items":[{"id":"x","title":"T","body":"B","dateTime":"2026-10-20T08:00:00.000","repetitionData":{"type":2,"number":1,"weekdays":[1,3,5]},
+               "colour":4294198070,"archived":false,"archivedDateTime":null,"snoozeDateTime":null,"dismissible":true,
+               "updatedAt":"2026-10-19T08:55:12.000","upcoming":["2026-10-20T08:00:00.000"],"repeatLabel":"weekly (Mon, Wed, Fri)","unknown":1}],
+             "appliedCommands":[]}
+        """.trimIndent()
+        val parsed = WearJson.decodeFromString(Snapshot.serializer(), json)
+        assertEquals(128, parsed.rev)
+        assertEquals(0xFFF44336, parsed.items.single().colour)
+        assertTrue(parsed.items.single().repetitionData!!.hasWeekdays)
+    }
+}
