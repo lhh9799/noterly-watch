@@ -141,8 +141,30 @@ object WatchState {
         return (bits xor (bits ushr 32)).toInt()
     }
 
-    /** Bridge tag of the phone notification for one send of an item, see BridgingManager on the watch. */
-    fun bridgeTag(itemId: String, fireEpochMillis: Long) = "noterly:$itemId:$fireEpochMillis"
+    /**
+     * Whether a reminder the watch just created, changed or restored should be shown by the watch straight away while
+     * the phone is away: an active one with no time, which the phone would also show at once.
+     */
+    fun notifiesImmediately(item: NoteItem?, zone: ZoneId = ZoneId.systemDefault()): Boolean =
+        item != null && !item.archived && nextDue(item, zone) == null
+
+    /**
+     * Whether one of the watch's own notifications is out of date: the reminder was done or deleted, or now notifies
+     * later. [shownDueMillis] is the send it was shown for, null for an immediate reminder.
+     */
+    fun ownNotificationStale(item: NoteItem?, shownDueMillis: Long?, nowMillis: Long, zone: ZoneId = ZoneId.systemDefault()): Boolean {
+        if (item == null || item.archived) return true
+        val due = nextDue(item, zone)?.let { DartTime.toEpochMillis(it, zone) }
+        return if (shownDueMillis == null) due != null && due > nowMillis else due == null || due > shownDueMillis
+    }
+
+    /**
+     * Bridge tag of the phone notification for one send of an item, see BridgingManager on the watch. Immediate
+     * reminders have no send time and use [IMMEDIATE_TAG] instead.
+     */
+    fun bridgeTag(itemId: String, fireEpochMillis: Long?) = "noterly:$itemId:${fireEpochMillis ?: IMMEDIATE_TAG}"
+
+    const val IMMEDIATE_TAG = "immediate"
 
     const val UPCOMING_COUNT = 5
 }

@@ -131,4 +131,40 @@ class WatchStateTest {
         assertEquals(0xFFF44336, parsed.items.single().colour)
         assertTrue(parsed.items.single().repetitionData!!.hasWeekdays)
     }
+
+    @Test
+    fun onlyActiveImmediateRemindersNotifyAtOnce() {
+        val immediate = NoteItem(id = "i", title = "Now")
+        assertTrue(WatchState.notifiesImmediately(immediate, zone))
+        assertFalse(WatchState.notifiesImmediately(immediate.copy(archived = true), zone))
+        assertFalse(WatchState.notifiesImmediately(single, zone))
+        assertFalse(WatchState.notifiesImmediately(immediate.copy(snoozeDateTime = "2026-10-19T13:00:00.000"), zone))
+        assertFalse(WatchState.notifiesImmediately(null, zone))
+    }
+
+    @Test
+    fun immediateOwnNotificationStaysUntilDoneOrGivenALaterTime() {
+        val immediate = NoteItem(id = "i", title = "Now")
+        val nowMillis = DartTime.toEpochMillis(now, zone)
+        assertFalse(WatchState.ownNotificationStale(immediate, null, nowMillis, zone))
+        assertTrue(WatchState.ownNotificationStale(null, null, nowMillis, zone))
+        assertTrue(WatchState.ownNotificationStale(immediate.copy(archived = true), null, nowMillis, zone))
+        assertTrue(WatchState.ownNotificationStale(immediate.copy(snoozeDateTime = "2026-10-19T13:00:00.000"), null, nowMillis, zone))
+        assertFalse(WatchState.ownNotificationStale(immediate.copy(dateTime = "2026-10-19T11:00:00.000"), null, nowMillis, zone))
+    }
+
+    @Test
+    fun scheduledOwnNotificationGoesWhenMovedOn() {
+        val shown = DartTime.toEpochMillis(LocalDateTime.parse("2026-10-19T18:00:00"), zone)
+        val nowMillis = DartTime.toEpochMillis(now, zone)
+        assertFalse(WatchState.ownNotificationStale(single, shown, nowMillis, zone))
+        assertTrue(WatchState.ownNotificationStale(single.copy(snoozeDateTime = "2026-10-19T19:00:00.000"), shown, nowMillis, zone))
+        assertTrue(WatchState.ownNotificationStale(single.copy(dateTime = null), shown, nowMillis, zone))
+    }
+
+    @Test
+    fun bridgeTagsMatchThePhone() {
+        assertEquals("noterly:id:1792400000000", WatchState.bridgeTag("id", 1792400000000))
+        assertEquals("noterly:id:immediate", WatchState.bridgeTag("id", null))
+    }
 }
