@@ -45,7 +45,8 @@ object WatchState {
                     if (seen != null && current != null && current.isAfter(seen)) return items
                     replace(markRepeatDone(item, issuedAt, zone))
                 } else {
-                    replace(item.copy(archived = true, archivedDateTime = command.issuedAt, snoozeDateTime = null))
+                    // Like the phone's archive, which keeps the snooze, so a restore notifies the same way on both
+                    replace(item.copy(archived = true, archivedDateTime = command.issuedAt))
                 }
             }
 
@@ -144,10 +145,14 @@ object WatchState {
 
     /**
      * Whether a reminder the watch just created, changed or restored should be shown by the watch straight away while
-     * the phone is away: an active one with no time, which the phone would also show at once.
+     * the phone is away: an active one with no time, or whose time or snooze has already passed, which the phone would
+     * also show at once.
      */
-    fun notifiesImmediately(item: NoteItem?, zone: ZoneId = ZoneId.systemDefault()): Boolean =
-        item != null && !item.archived && nextDue(item, zone) == null
+    fun notifiesImmediately(item: NoteItem?, now: LocalDateTime, zone: ZoneId = ZoneId.systemDefault()): Boolean {
+        if (item == null || item.archived) return false
+        val due = nextDue(item, zone) ?: return true
+        return !Recurrence.isBefore(now, due, zone)
+    }
 
     /**
      * Whether one of the watch's own notifications is out of date: the reminder was done or deleted, or now notifies
