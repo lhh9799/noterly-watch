@@ -40,6 +40,15 @@ class WatchStateTest {
     }
 
     @Test
+    fun doneBeforeARepeatIsDueSkipsThatRepeat() {
+        // Wednesday 09:00 is still ahead at Monday noon; done counts for it and moves on to Friday
+        val upcoming = repeating.copy(dateTime = "2026-10-21T09:00:00.000")
+        val done = command(CommandType.DONE, upcoming, CommandPayload(seenDateTime = upcoming.dateTime))
+        val item = WatchState.overlay(snapshot.copy(items = listOf(single, upcoming)), listOf(done), zone).first { it.id == upcoming.id }
+        assertEquals("2026-10-23T09:00:00.000", item.dateTime)
+    }
+
+    @Test
     fun aRepeatDoneOnBothSidesOnlyMovesOnce() {
         // The phone already marked it as done and moved it on to Wednesday; the watch's command saw Monday
         val phoneDone = snapshot.copy(items = listOf(single, repeating.copy(dateTime = "2026-10-21T09:00:00.000")))

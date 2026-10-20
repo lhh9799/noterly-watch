@@ -104,7 +104,8 @@ object WatchState {
     fun markRepeatDone(item: NoteItem, now: LocalDateTime, zone: ZoneId = ZoneId.systemDefault()): NoteItem {
         val repetition = item.repetitionData ?: return item
         val start = DartTime.parseOrNull(item.dateTime, zone) ?: now
-        val next = Recurrence.advancePast(repetition, start, now, zone)
+        // Done before the repeat is due counts for that repeat, so always move on at least once
+        val next = Recurrence.advancePast(repetition, Recurrence.next(repetition, start, zone), now, zone)
         return item.copy(
             dateTime = DartTime.format(next),
             snoozeDateTime = null,
