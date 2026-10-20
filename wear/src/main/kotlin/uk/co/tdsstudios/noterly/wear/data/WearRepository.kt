@@ -126,6 +126,7 @@ class WearRepository private constructor(private val context: Context) {
         _phoneConnected.value = connected
 
         if (connected && requestSnapshot) {
+            resendPending()
             for (node in nodes) {
                 runCatching { messageClient.sendMessage(node.id, WearPaths.SYNC_REQUEST, ByteArray(0)).await() }
                     .onFailure { Log.w(TAG, "Failed to send a sync request to ${node.displayName}", it) }
@@ -170,15 +171,27 @@ class WearRepository private constructor(private val context: Context) {
     }
 
     /**
-     * The phone shows a reminder with no time as soon as it is saved. While the phone is away the watch does that
-     * itself, and tags it so the phone's copy is not bridged over again once it reconnects.
+     * The phone shows a reminder with no time, or whose time has passed, as soon as it is saved. While the phone is away
+     * the watch does that itself, and tags it so the phone's copy is not bridged over again once it reconnects.
      */
     private suspend fun notifyIfImmediate(itemId: String) {
         val view = current()
         val item = view.item(itemId)
-        if (!WatchState.notifiesImmediately(item) || refreshConnection()) return
-        WatchNotifications.show(context, item!!, view.settings, null)
-        recordOwnNotification(itemId, null)
+        if (!WatchState.notifiesImmediately(item, LocalDateTime.now()) || refreshConnection()) return
+        // A passed time keeps its send time in the tag, as on the phone
+        val dueMillis = WatchState.nextDue(item!!)?.let { DartTime.toEpochMillis(it) }
+        WatchNotifications.show(context, item, view.settings, dueMillis)
+        recordOwnNotification(itemId, dueMillis)
+    }
+
+    /**
+     * Queues the commands the phone has not applied yet again. The Data Layer drops an app's DataItems when it is
+     * updated, so they would otherwise never reach the phone. The phone skips a command it already applied.
+     */
+    suspend fun resendPending() {
+        val data = store.data.first()
+        val acknowledged = WatchState.acknowledged(data.snapshot ?: Snapshot(), data.pending)
+        data.pending.filterNot { it.commandId in acknowledged }.forEach { send(it) }
     }
 
     /**

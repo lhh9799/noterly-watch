@@ -16,6 +16,8 @@ class BootReceiver : BroadcastReceiver() {
         CoroutineScope(Dispatchers.Default).launch {
             try {
                 context.repository.refreshOutputs()
+                // An app update drops the queued commands from the Data Layer
+                if (intent.action == Intent.ACTION_MY_PACKAGE_REPLACED) context.repository.resendPending()
             } finally {
                 result.finish()
             }
