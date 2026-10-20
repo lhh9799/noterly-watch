@@ -144,11 +144,29 @@ class WatchStateTest {
     @Test
     fun onlyActiveImmediateRemindersNotifyAtOnce() {
         val immediate = NoteItem(id = "i", title = "Now")
-        assertTrue(WatchState.notifiesImmediately(immediate, zone))
-        assertFalse(WatchState.notifiesImmediately(immediate.copy(archived = true), zone))
-        assertFalse(WatchState.notifiesImmediately(single, zone))
-        assertFalse(WatchState.notifiesImmediately(immediate.copy(snoozeDateTime = "2026-10-19T13:00:00.000"), zone))
-        assertFalse(WatchState.notifiesImmediately(null, zone))
+        assertTrue(WatchState.notifiesImmediately(immediate, now, zone))
+        assertFalse(WatchState.notifiesImmediately(immediate.copy(archived = true), now, zone))
+        assertFalse(WatchState.notifiesImmediately(single, now, zone))
+        assertFalse(WatchState.notifiesImmediately(immediate.copy(snoozeDateTime = "2026-10-19T13:00:00.000"), now, zone))
+        assertFalse(WatchState.notifiesImmediately(null, now, zone))
+    }
+
+    @Test
+    fun aRestoredReminderWhoseTimeHasPassedNotifiesAtOnce() {
+        // The phone shows a reminder at once when its time or snooze is already over
+        val immediate = NoteItem(id = "i", title = "Now")
+        assertTrue(WatchState.notifiesImmediately(immediate.copy(snoozeDateTime = "2026-10-19T11:00:00.000"), now, zone))
+        assertTrue(WatchState.notifiesImmediately(single.copy(dateTime = "2026-10-19T09:00:00.000"), now, zone))
+    }
+
+    @Test
+    fun doneAndRestoredKeepsTheSnoozeLikeThePhone() {
+        val snoozed = single.copy(snoozeDateTime = "2026-10-19T11:00:00.000")
+        val done = command(CommandType.DONE, snoozed)
+        val restore = command(CommandType.RESTORE, snoozed)
+        val item = WatchState.overlay(snapshot.copy(items = listOf(snoozed)), listOf(done, restore), zone).single()
+        assertFalse(item.archived)
+        assertEquals("2026-10-19T11:00:00.000", item.snoozeDateTime)
     }
 
     @Test
