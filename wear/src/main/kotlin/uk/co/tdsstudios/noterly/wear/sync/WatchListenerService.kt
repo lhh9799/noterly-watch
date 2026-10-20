@@ -23,7 +23,8 @@ class WatchListenerService : WearableListenerService() {
         if (capabilityInfo.name != WearPaths.CAPABILITY_PHONE) return
         val connected = capabilityInfo.nodes.isNotEmpty()
         repository.onPhoneReachabilityChanged(connected)
-        // Back in reach: ask for the latest list. Commands queued meanwhile are delivered by the Data Layer itself.
+        // Back in reach: ask for the latest list. Commands queued meanwhile are delivered by the Data Layer, and queued
+        // again in case it dropped them.
         if (connected) runBlocking { repository.refreshConnection(requestSnapshot = true) }
     }
 }
