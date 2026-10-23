@@ -24,7 +24,7 @@ data class StoredData(
     val pending: List<Command>,
     /** When the last snapshot arrived, in epoch millis, or 0. */
     val lastSyncMillis: Long,
-    /** Bridge tags of the sends the watch notified by itself, see BridgingManager. */
+    /** Tags of the sends the watch has notified, so each is shown once. */
     val firedTags: List<String>,
     /** Items that have an alarm set for the watch's own notification. */
     val scheduledIds: List<String>,
@@ -87,11 +87,19 @@ class WatchStore(private val context: Context) {
         return tags
     }
 
+    /** Forgets the notified sends of reminders that are no longer active, so a restored one notifies again. */
+    suspend fun forgetFiredTags(keep: (String) -> Boolean) {
+        context.watchDataStore.edit { prefs ->
+            val current = prefs[firedTagsKey]?.let { runCatching { WearJson.decodeFromString(stringList, it) }.getOrNull() } ?: return@edit
+            prefs[firedTagsKey] = WearJson.encodeToString(stringList, current.filter(keep))
+        }
+    }
+
     suspend fun setScheduledIds(ids: List<String>) {
         context.watchDataStore.edit { prefs -> prefs[scheduledKey] = WearJson.encodeToString(stringList, ids) }
     }
 
     private companion object {
-        const val MAX_FIRED_TAGS = 30
+        const val MAX_FIRED_TAGS = 200
     }
 }
