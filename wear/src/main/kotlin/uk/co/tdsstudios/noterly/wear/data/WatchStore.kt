@@ -91,7 +91,8 @@ class WatchStore(private val context: Context) {
     suspend fun forgetFiredTags(keep: (String) -> Boolean) {
         context.watchDataStore.edit { prefs ->
             val current = prefs[firedTagsKey]?.let { runCatching { WearJson.decodeFromString(stringList, it) }.getOrNull() } ?: return@edit
-            prefs[firedTagsKey] = WearJson.encodeToString(stringList, current.filter(keep))
+            val kept = current.filter(keep)
+            if (kept.size != current.size) prefs[firedTagsKey] = WearJson.encodeToString(stringList, kept)
         }
     }
 
