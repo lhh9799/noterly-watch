@@ -52,14 +52,14 @@ class WatchStore(private val context: Context) {
 
     /**
      * Stores a snapshot from the phone and drops the commands it says were applied. A snapshot older than the stored
-     * one (Data Layer events can arrive out of order) is ignored. Returns false when ignored.
+     * one is ignored (see [WatchState.replacesSnapshot]). Returns false when ignored.
      */
     suspend fun saveSnapshot(snapshot: Snapshot, receivedAtMillis: Long): Boolean {
         var saved = false
         context.watchDataStore.edit { prefs ->
             val current = prefs[snapshotKey]?.let { runCatching { WearJson.decodeFromString(Snapshot.serializer(), it) }.getOrNull() }
             prefs[lastSyncKey] = receivedAtMillis
-            if (current != null && current.rev > snapshot.rev) return@edit
+            if (!WatchState.replacesSnapshot(current, snapshot)) return@edit
 
             prefs[snapshotKey] = WearJson.encodeToString(Snapshot.serializer(), snapshot)
             val pending = prefs[pendingKey]?.let { runCatching { WearJson.decodeFromString(commandList, it) }.getOrNull() }.orEmpty()
