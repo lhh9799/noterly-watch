@@ -16,9 +16,12 @@ tiles = "1.5.0"
 protolayout = "1.3.0"
 complications = "1.2.1"
 concurrentFutures = "1.2.0"
+fragment = "1.8.5"
 junit = "4.13.2"
 
 [libraries]
+# Only to lift the Fragment that play-services-wearable pulls in (1.2.4) past lint's InvalidFragmentVersionForActivityResult
+androidx-fragment = { module = "androidx.fragment:fragment", version.ref = "fragment" }
 android-gradle-plugin = { module = "com.android.tools.build:gradle", version.ref = "agp" }
 kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 kotlin-serialization-plugin = { module = "org.jetbrains.kotlin:kotlin-serialization", version.ref = "kotlin" }

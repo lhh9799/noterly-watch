@@ -12,7 +12,7 @@ import uk.co.tdsstudios.noterly.wearshared.NoteItem
 import uk.co.tdsstudios.noterly.wearshared.SnapshotSettings
 import uk.co.tdsstudios.noterly.wearshared.WatchState
 
-/** The watch's own notifications, shown only while the phone is away. */
+/** The watch's own notifications. The phone's are not bridged over, so these are the only ones on the watch. */
 object WatchNotifications {
     private const val CHANNEL_ID = "reminders"
     private const val EXTRA_DUE_MILLIS = "noterly.dueMillis"

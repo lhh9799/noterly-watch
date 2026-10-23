@@ -99,6 +99,7 @@ class WearRepository private constructor(private val context: Context) {
         if (store.saveSnapshot(snapshot, System.currentTimeMillis())) {
             _phoneConnected.value = true
             refreshOutputs()
+            notifyDueNow()
         }
     }
 
@@ -167,21 +168,27 @@ class WearRepository private constructor(private val context: Context) {
         store.addPending(command)
         send(command)
         refreshOutputs()
-        if (type == CommandType.CREATE || type == CommandType.UPDATE || type == CommandType.RESTORE) notifyIfImmediate(itemId)
+        if (type == CommandType.CREATE || type == CommandType.UPDATE || type == CommandType.RESTORE) notifyDueNow()
     }
 
     /**
-     * The phone shows a reminder with no time, or whose time has passed, as soon as it is saved. While the phone is away
-     * the watch does that itself, and tags it so the phone's copy is not bridged over again once it reconnects.
+     * The phone shows a reminder with no time, or whose time or snooze has passed, as soon as it is saved. The watch
+     * does the same, once per send, for reminders made on either side; later sends come from its alarms.
      */
-    private suspend fun notifyIfImmediate(itemId: String) {
+    private suspend fun notifyDueNow() {
         val view = current()
-        val item = view.item(itemId)
-        if (!WatchState.notifiesImmediately(item, LocalDateTime.now()) || refreshConnection()) return
-        // A passed time keeps its send time in the tag, as on the phone
-        val dueMillis = WatchState.nextDue(item!!)?.let { DartTime.toEpochMillis(it) }
-        WatchNotifications.show(context, item, view.settings, dueMillis)
-        recordOwnNotification(itemId, dueMillis)
+        val activeIds = view.active.map { it.id }.toSet()
+        store.forgetFiredTags { tag -> tag.substringBeforeLast(':').substringAfter(':') in activeIds }
+        val shown = store.data.first().firedTags.toSet()
+        val now = LocalDateTime.now()
+        for (item in view.items) {
+            if (!WatchState.notifiesImmediately(item, now)) continue
+            // A passed time keeps its send time in the tag, as on the phone
+            val dueMillis = WatchState.nextDue(item)?.let { DartTime.toEpochMillis(it) }
+            if (WatchState.bridgeTag(item.id, dueMillis) in shown) continue
+            WatchNotifications.show(context, item, view.settings, dueMillis)
+            recordOwnNotification(item.id, dueMillis)
+        }
     }
 
     /**
@@ -219,17 +226,18 @@ class WearRepository private constructor(private val context: Context) {
         NextReminderComplicationService.requestUpdate(context)
     }
 
-    /**
-     * Records a send the watch notified by itself, so the phone's copy of it is not bridged over as well. [dueMillis]
-     * is null for an immediate reminder.
-     */
+    /** Records a send the watch notified, so it is shown once. [dueMillis] is null for an immediate reminder. */
     suspend fun recordOwnNotification(itemId: String, dueMillis: Long?) {
-        val tags = store.addFiredTag(WatchState.bridgeTag(itemId, dueMillis))
-        runCatching {
-            BridgingManager.fromContext(context).setConfig(
-                BridgingConfig.Builder(context, true).addExcludedTags(tags.toSet()).build(),
-            )
-        }.onFailure { Log.w(TAG, "Failed to update bridging config", it) }
+        store.addFiredTag(WatchState.bridgeTag(itemId, dueMillis))
+    }
+
+    /**
+     * The watch shows every reminder itself, so the phone's notifications are not bridged over as well. The manifest
+     * says the same; this also covers a watch that kept an earlier setting.
+     */
+    fun disableBridging() {
+        runCatching { BridgingManager.fromContext(context).setConfig(BridgingConfig.Builder(context, false).build()) }
+            .onFailure { Log.w(TAG, "Failed to turn off notification bridging", it) }
     }
 
     // endregion
