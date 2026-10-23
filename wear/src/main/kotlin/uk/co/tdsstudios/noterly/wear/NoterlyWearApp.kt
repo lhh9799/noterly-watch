@@ -8,6 +8,7 @@ class NoterlyWearApp : Application() {
     override fun onCreate() {
         super.onCreate()
         WatchNotifications.createChannel(this)
+        repository.disableBridging()
     }
 }
 

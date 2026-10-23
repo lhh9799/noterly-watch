@@ -18,6 +18,10 @@
             android:theme="@android:style/Theme.DeviceDefault">
 
         <!-- The watch app works with the phone app; it is not used on its own -->
+        <!-- The watch shows every reminder itself, so the phone's notifications are not bridged over as well -->
+        <meta-data
+                android:name="com.google.android.wearable.notificationBridgeMode"
+                android:value="NO_BRIDGING" />
         <meta-data
                 android:name="com.google.android.wearable.standalone"
                 android:value="false"/>

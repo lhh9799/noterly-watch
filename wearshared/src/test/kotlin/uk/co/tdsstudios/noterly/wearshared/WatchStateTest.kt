@@ -82,6 +82,18 @@ class WatchStateTest {
     }
 
     @Test
+    fun olderSnapshotsAreIgnoredUnlessThePhoneWasReset() {
+        val stored = snapshot.copy(rev = 40, generatedAt = "2026-10-19T12:00:00.000")
+        assertTrue(WatchState.replacesSnapshot(null, snapshot, zone))
+        assertTrue(WatchState.replacesSnapshot(stored, stored.copy(rev = 41, generatedAt = "2026-10-19T12:01:00.000"), zone))
+        // Out of order: made before the stored one
+        assertFalse(WatchState.replacesSnapshot(stored, stored.copy(rev = 39, generatedAt = "2026-10-19T11:59:00.000"), zone))
+        // Phone app reinstalled: its rev starts again
+        assertTrue(WatchState.replacesSnapshot(stored, stored.copy(rev = 2, generatedAt = "2026-10-19T12:05:00.000"), zone))
+        assertFalse(WatchState.replacesSnapshot(stored, stored.copy(rev = 2, generatedAt = null), zone))
+    }
+
+    @Test
     fun createDeleteAndRestore() {
         val created = Commands.new(CommandType.CREATE, "a1b2c3d4-0000-4000-8000-000000000003", 7, now,
             CommandPayload(title = "Water plants", dateTime = "2026-10-19T13:00:00.000", colour = 0xFF4CAF50))

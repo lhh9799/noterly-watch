@@ -11,7 +11,7 @@ import uk.co.tdsstudios.noterly.wearshared.DartTime
 import uk.co.tdsstudios.noterly.wearshared.WatchState
 import kotlin.math.abs
 
-/** A reminder is due. Notifies from the watch only when the phone is away. */
+/** A reminder is due. The watch notifies it whether or not the phone is connected. */
 class ReminderAlarmReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
         val itemId = intent.getStringExtra(ReminderAlarms.EXTRA_ITEM_ID) ?: return
@@ -27,7 +27,7 @@ class ReminderAlarmReceiver : BroadcastReceiver() {
 
                 // Skip if it was done, removed or moved since the alarm was set
                 val stillDue = item != null && !item.archived && due != null && abs(due - dueMillis) < 60_000
-                if (stillDue && !repository.refreshConnection()) {
+                if (stillDue) {
                     WatchNotifications.show(context, item!!, view.settings, dueMillis)
                     repository.recordOwnNotification(itemId, dueMillis)
                 }
