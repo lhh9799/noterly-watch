@@ -39,7 +39,7 @@ android {
         minSdk = 36 // Wear OS 6, Galaxy Watch 8 only
         targetSdk = 36
         versionCode = 1
-        versionName = "0.1.0"
+        versionName = "1.0.0"
     }
 
     signingConfigs {
