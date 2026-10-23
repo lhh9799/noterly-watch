@@ -16,6 +16,18 @@ object WatchState {
         return pending.map { it.commandId }.filter { it in applied }.toSet()
     }
 
+    /**
+     * Whether [incoming] replaces the stored [current] snapshot. An older one (Data Layer events can arrive out of order)
+     * is ignored, but a lower rev made later means the phone app's data was reset (reinstalled or cleared), and the
+     * phone is still the source of truth.
+     */
+    fun replacesSnapshot(current: Snapshot?, incoming: Snapshot, zone: ZoneId = ZoneId.systemDefault()): Boolean {
+        if (current == null || incoming.rev >= current.rev) return true
+        val incomingAt = DartTime.parseOrNull(incoming.generatedAt, zone) ?: return false
+        val currentAt = DartTime.parseOrNull(current.generatedAt, zone) ?: return true
+        return incomingAt.isAfter(currentAt)
+    }
+
     fun overlay(snapshot: Snapshot, pending: List<Command>, zone: ZoneId = ZoneId.systemDefault()): List<NoteItem> {
         val applied = snapshot.appliedCommands.toSet()
         var items = snapshot.items
