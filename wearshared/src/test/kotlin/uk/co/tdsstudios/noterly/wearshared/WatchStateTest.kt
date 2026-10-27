@@ -164,6 +164,21 @@ class WatchStateTest {
     }
 
     @Test
+    fun onlyDismissibleRemindersNotifyOnTheWatch() {
+        val on = NoteItem(id = "i", title = "Now", dismissible = true)
+        assertTrue(WatchState.notifiesOnWatch(on, SnapshotSettings()))
+        assertFalse(WatchState.notifiesOnWatch(on.copy(dismissible = false), SnapshotSettings()))
+        assertFalse(WatchState.notifiesOnWatch(on, SnapshotSettings(dismissibleEnabled = false)))
+    }
+
+    @Test
+    fun aReminderMadeOnTheWatchTakesTheDefaultFromThePhone() {
+        val created = Commands.new(CommandType.CREATE, "a1b2c3d4-0000-4000-8000-000000000004", 7, now, CommandPayload(title = "Call"))
+        assertFalse(WatchState.apply(emptyList(), created, SnapshotSettings(), zone).single().dismissible)
+        assertTrue(WatchState.apply(emptyList(), created, SnapshotSettings(dismissibleByDefault = true), zone).single().dismissible)
+    }
+
+    @Test
     fun aRestoredReminderWhoseTimeHasPassedNotifiesAtOnce() {
         // The phone shows a reminder at once when its time or snooze is already over
         val immediate = NoteItem(id = "i", title = "Now")

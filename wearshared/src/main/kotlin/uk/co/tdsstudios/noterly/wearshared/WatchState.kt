@@ -78,7 +78,7 @@ object WatchState {
                     colour = payload.colour ?: NoterlyColours.random(),
                     dateTime = payload.dateTime,
                     repetitionData = payload.repetitionData,
-                    dismissible = false,
+                    dismissible = settings.dismissibleByDefault,
                     updatedAt = command.issuedAt,
                 )
             }
@@ -154,6 +154,12 @@ object WatchState {
         val bits = runCatching { UUID.fromString(itemId) }.map { it.mostSignificantBits xor it.leastSignificantBits }.getOrElse { itemId.hashCode().toLong() }
         return (bits xor (bits ushr 32)).toInt()
     }
+
+    /**
+     * Whether the watch shows notifications for [item]: only reminders with the dismissible option on, and only if the
+     * option is allowed in the phone's Settings. The others still show in the list.
+     */
+    fun notifiesOnWatch(item: NoteItem, settings: SnapshotSettings) = settings.dismissibleEnabled && item.dismissible
 
     /**
      * Whether a reminder the watch just created, changed or restored should be shown by the watch straight away while

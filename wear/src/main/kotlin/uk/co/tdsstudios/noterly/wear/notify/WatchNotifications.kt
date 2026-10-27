@@ -70,14 +70,15 @@ object WatchNotifications {
      * Removes the watch's own notifications for reminders that were done, deleted or moved to a later time, for
      * example on the phone after it reconnected. An immediate one stays until then, although it has no send time.
      */
-    fun cancelStale(context: Context, items: List<NoteItem>) {
+    fun cancelStale(context: Context, items: List<NoteItem>, settings: SnapshotSettings) {
         val manager = context.getSystemService(NotificationManager::class.java)
         for (shown in manager.activeNotifications) {
             val extras = shown.notification.extras
             val itemId = extras.getString(EXTRA_ITEM_ID) ?: continue
             val dueMillis = if (extras.getBoolean(EXTRA_IMMEDIATE)) null else extras.getLong(EXTRA_DUE_MILLIS)
             val item = items.firstOrNull { it.id == itemId }
-            if (WatchState.ownNotificationStale(item, dueMillis, System.currentTimeMillis())) manager.cancel(shown.id)
+            val turnedOff = item != null && !WatchState.notifiesOnWatch(item, settings)
+            if (turnedOff || WatchState.ownNotificationStale(item, dueMillis, System.currentTimeMillis())) manager.cancel(shown.id)
         }
     }
 
