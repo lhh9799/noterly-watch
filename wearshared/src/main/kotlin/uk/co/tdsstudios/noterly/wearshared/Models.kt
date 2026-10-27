@@ -59,6 +59,7 @@ data class NoteItem(
 data class SnapshotSettings(
     val snoozeSeconds: Long = 3600,
     val dismissibleEnabled: Boolean = true,
+    val dismissibleByDefault: Boolean = false,
 )
 
 @Serializable

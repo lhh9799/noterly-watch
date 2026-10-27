@@ -182,7 +182,7 @@ class WearRepository private constructor(private val context: Context) {
         val shown = store.data.first().firedTags.toSet()
         val now = LocalDateTime.now()
         for (item in view.items) {
-            if (!WatchState.notifiesImmediately(item, now)) continue
+            if (!WatchState.notifiesImmediately(item, now) || !WatchState.notifiesOnWatch(item, view.settings)) continue
             // A passed time keeps its send time in the tag, as on the phone
             val dueMillis = WatchState.nextDue(item)?.let { DartTime.toEpochMillis(it) }
             if (WatchState.bridgeTag(item.id, dueMillis) in shown) continue
@@ -219,9 +219,9 @@ class WearRepository private constructor(private val context: Context) {
     /** Re-sets alarms, removes stale watch notifications and refreshes the tile and complication. */
     suspend fun refreshOutputs() = refreshMutex.withLock {
         val view = current()
-        val scheduled = ReminderAlarms.reschedule(context, view.items, store.data.first().scheduledIds)
+        val scheduled = ReminderAlarms.reschedule(context, view.items, view.settings, store.data.first().scheduledIds)
         store.setScheduledIds(scheduled)
-        WatchNotifications.cancelStale(context, view.items)
+        WatchNotifications.cancelStale(context, view.items, view.settings)
         NoterlyTileService.requestUpdate(context)
         NextReminderComplicationService.requestUpdate(context)
     }
