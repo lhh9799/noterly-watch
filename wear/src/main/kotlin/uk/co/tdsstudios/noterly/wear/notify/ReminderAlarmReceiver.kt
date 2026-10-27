@@ -26,7 +26,8 @@ class ReminderAlarmReceiver : BroadcastReceiver() {
                 val due = item?.let { WatchState.nextDue(it) }?.let { DartTime.toEpochMillis(it) }
 
                 // Skip if it was done, removed or moved since the alarm was set
-                val stillDue = item != null && !item.archived && due != null && abs(due - dueMillis) < 60_000
+                val stillDue = item != null && !item.archived && due != null && abs(due - dueMillis) < 60_000 &&
+                    WatchState.notifiesOnWatch(item, view.settings)
                 if (stillDue) {
                     WatchNotifications.show(context, item!!, view.settings, dueMillis)
                     repository.recordOwnNotification(itemId, dueMillis)
