@@ -7,26 +7,27 @@ import android.content.Intent
 import android.net.Uri
 import uk.co.tdsstudios.noterly.wearshared.DartTime
 import uk.co.tdsstudios.noterly.wearshared.NoteItem
+import uk.co.tdsstudios.noterly.wearshared.SnapshotSettings
 import uk.co.tdsstudios.noterly.wearshared.WatchState
 import java.time.LocalDateTime
 
 /**
  * Sets an exact alarm for the next send of every active reminder. Whether the watch actually notifies is decided
  * when the alarm goes off: only if the phone is not connected (otherwise the phone's own notification is bridged
- * over), so the same reminder never rings twice.
+ * over), so the same reminder never rings twice. Reminders that are not shown on the watch get no alarm.
  */
 object ReminderAlarms {
     const val EXTRA_ITEM_ID = "itemId"
     const val EXTRA_DUE_MILLIS = "dueMillis"
 
     /** Returns the IDs that now have an alarm. */
-    fun reschedule(context: Context, items: List<NoteItem>, previouslyScheduled: List<String>): List<String> {
+    fun reschedule(context: Context, items: List<NoteItem>, settings: SnapshotSettings, previouslyScheduled: List<String>): List<String> {
         val alarmManager = context.getSystemService(AlarmManager::class.java)
         val now = LocalDateTime.now()
         val scheduled = mutableListOf<String>()
 
         for (item in items) {
-            val fireAt = WatchState.fireTime(item, now)
+            val fireAt = if (WatchState.notifiesOnWatch(item, settings)) WatchState.fireTime(item, now) else null
             if (fireAt == null) {
                 cancel(context, item.id)
                 continue
