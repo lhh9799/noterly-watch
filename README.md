@@ -2,6 +2,8 @@
 
 [Noterly](https://github.com/lhh9799/noterly) 폰 앱의 알림을 Galaxy Watch(Wear OS)에서 보고 처리하는 워치 앱입니다. 폰을 꺼내지 않고 손목에서 알림을 받고, 완료·스누즈하고, 새 알림을 추가할 수 있습니다.
 
+> 원작 [Noterly](https://github.com/tomc128/noterly)(Tom Chapman, TDS Studios)를 바탕으로 만든 **개인 포크**이며, TDS Studios와는 관계가 없습니다. 라이선스는 [아래](#라이선스)를 보세요.
+
 <p>
   <img src="docs/screenshots/list.png" width="200" alt="목록">
   <img src="docs/screenshots/detail.png" width="200" alt="상세">
@@ -105,3 +107,15 @@ Android SDK 없이 공용 모듈만 테스트할 때:
 - 워치 자체 알림은 폰처럼 항목마다 한 번(스누즈 끝 또는 dateTime)만 울리고, 다음 반복은 완료한 뒤에 예약합니다. `upcoming`은 표시와, 워치에서 반복을 바꾼 항목의 계산에 씁니다.
 - 스냅샷에 `appliedCommands`(폰이 적용·무시한 최근 명령 ID)를 추가했습니다. 워치가 대기 명령을 언제 지울지 알기 위해서입니다.
 - 화면 문구는 폰 앱과 같은 영어입니다(폰 앱에도 한국어 번역이 없고, 명세의 비목표에 번역 추가가 있음).
+
+
+## 라이선스
+
+[GNU Affero General Public License v3.0](LICENSE)(AGPL-3.0)을 따릅니다. 원작 Noterly와 같은 라이선스입니다.
+
+이 워치 앱은 원작 [Noterly](https://github.com/tomc128/noterly)(Copyright © 2023 Tom Chapman, TDS Studios, AGPL-3.0)에서 다음을 가져왔습니다.
+
+- 앱 아이콘과 알림 아이콘(`wear/src/main/res`의 `ic_launcher*`, `notification_icon_48`): 원작 앱의 이미지를 그대로 씁니다.
+- 반복 계산(`wearshared`의 `Recurrence.kt`): 원작의 Dart 코드(`lib/models/repetition_data.dart`)를 Kotlin으로 옮긴 것입니다. 요일 반복은 [이 포크](https://github.com/lhh9799/noterly)에서 추가한 규칙입니다.
+
+"Noterly" 이름과 `uk.co.tdsstudios` 패키지 이름은 폰 앱과 연결하기 위해 원작을 그대로 따릅니다(Data Layer는 같은 applicationId끼리만 연결됩니다).
