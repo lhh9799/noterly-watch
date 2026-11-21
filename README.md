@@ -17,8 +17,8 @@ your wrist, mark them as done or snooze them, and add new ones without taking ou
 
 ## Features
 
-- **Reminder list**: shows the same reminders as the phone, ordered by when they notify next. Repeating reminders also
-  show their next few times.
+- **Reminder list**: shows the same reminders as the phone, grouped like the phone into Shown immediately, Scheduled and
+  Repeating, each ordered by when they notify next. Repeating reminders also show their next few times.
 - **Watch notifications**: the watch notifies with a vibration at the set time by itself, even when the phone is far
   away or switched off.
 - **Done and snooze**: act on a reminder from its notification or its details screen, and the phone is updated too. A
