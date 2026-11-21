@@ -5,6 +5,9 @@ import java.time.LocalDateTime
 import java.time.ZoneId
 import java.util.UUID
 
+/** The sections of the active list, in the order the phone shows them. */
+enum class ListSection { IMMEDIATE, SCHEDULED, REPEATING }
+
 /**
  * What the watch shows: the last snapshot from the phone with the commands the phone has not applied yet laid on
  * top, so a reminder marked as done on the watch leaves the list straight away.
@@ -129,6 +132,22 @@ object WatchState {
     /** Active items in the order of their next notification: immediate ones first, then by time. */
     fun activeSorted(items: List<NoteItem>, zone: ZoneId = ZoneId.systemDefault()): List<NoteItem> =
         items.filterNot { it.archived }.sortedWith(compareBy<NoteItem>({ nextDue(it, zone) != null }, { nextDue(it, zone) }))
+
+    /**
+     * Active items grouped like the phone's list: shown immediately, scheduled, then repeating, each in [activeSorted]
+     * order. Sections without items are left out.
+     */
+    fun activeSections(items: List<NoteItem>, zone: ZoneId = ZoneId.systemDefault()): List<Pair<ListSection, List<NoteItem>>> {
+        val grouped = activeSorted(items, zone).groupBy(::section)
+        return ListSection.entries.mapNotNull { section -> grouped[section]?.let { section to it } }
+    }
+
+    /** The phone's rule: repeating if it repeats, otherwise immediate without a dateTime and scheduled with one. */
+    fun section(item: NoteItem): ListSection = when {
+        item.isRepeating -> ListSection.REPEATING
+        item.isImmediate -> ListSection.IMMEDIATE
+        else -> ListSection.SCHEDULED
+    }
 
     /** Archived items, most recently done first. */
     fun archivedSorted(items: List<NoteItem>, zone: ZoneId = ZoneId.systemDefault()): List<NoteItem> =

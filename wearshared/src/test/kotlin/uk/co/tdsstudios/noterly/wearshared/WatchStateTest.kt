@@ -118,6 +118,25 @@ class WatchStateTest {
     }
 
     @Test
+    fun activeSectionsFollowThePhone() {
+        val immediate = NoteItem(id = "i", title = "Now")
+        val later = NoteItem(id = "l", title = "Later", dateTime = "2026-10-20T08:00:00.000")
+        val snoozedImmediate = NoteItem(id = "s", title = "Snoozed", snoozeDateTime = "2026-10-19T13:00:00.000")
+        val done = NoteItem(id = "d", title = "Done", archived = true)
+        val sections = WatchState.activeSections(listOf(repeating, later, snoozedImmediate, done, immediate, single), zone)
+            .map { (section, items) -> section to items.map { it.id } }
+        assertEquals(
+            listOf(
+                ListSection.IMMEDIATE to listOf("i", "s"),
+                ListSection.SCHEDULED to listOf(single.id, "l"),
+                ListSection.REPEATING to listOf(repeating.id),
+            ),
+            sections,
+        )
+        assertEquals(listOf(ListSection.SCHEDULED), WatchState.activeSections(listOf(later), zone).map { it.first })
+    }
+
+    @Test
     fun noOwnNotificationForPastOrImmediateItems() {
         assertNull(WatchState.fireTime(NoteItem(id = "i", title = "Now"), now, zone))
         assertNull(WatchState.fireTime(repeating, now, zone)) // Monday 09:00 already passed
