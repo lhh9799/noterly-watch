@@ -28,6 +28,7 @@ import uk.co.tdsstudios.noterly.wearshared.CommandPayload
 import uk.co.tdsstudios.noterly.wearshared.CommandType
 import uk.co.tdsstudios.noterly.wearshared.Commands
 import uk.co.tdsstudios.noterly.wearshared.DartTime
+import uk.co.tdsstudios.noterly.wearshared.ListSection
 import uk.co.tdsstudios.noterly.wearshared.NoteItem
 import uk.co.tdsstudios.noterly.wearshared.RepetitionData
 import uk.co.tdsstudios.noterly.wearshared.Snapshot
@@ -49,6 +50,7 @@ data class WatchView(
     val pendingIds: Set<String>,
 ) {
     val active: List<NoteItem> get() = WatchState.activeSorted(items)
+    val activeSections: List<Pair<ListSection, List<NoteItem>>> get() = WatchState.activeSections(items)
     val archived: List<NoteItem> get() = WatchState.archivedSorted(items)
 
     fun item(id: String): NoteItem? = items.firstOrNull { it.id == id }

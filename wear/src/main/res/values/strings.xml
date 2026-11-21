@@ -13,6 +13,9 @@
     <string name="list_now">Now</string>
     <string name="list_snoozed_until">Snoozed until %1$s</string>
     <string name="list_waiting_for_phone">Waiting for phone</string>
+    <string name="list_section_immediate">Shown immediately</string>
+    <string name="list_section_scheduled">Scheduled</string>
+    <string name="list_section_repeating">Repeating</string>
 
     <string name="detail_done">Mark as done</string>
     <string name="detail_snooze">Snooze</string>
