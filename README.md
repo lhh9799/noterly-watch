@@ -34,18 +34,22 @@ your wrist, mark them as done or snooze them, and add new ones without taking ou
 
 - **The Noterly phone app is required.** The watch app installs without it, in any order, but the phone app holds the
   reminders: without it the list stays empty and reminders added on the watch are not saved.
-- The phone app must be [Noterly v2026.10.23-1](https://github.com/lhh9799/noterly/releases/tag/v2026.10.23-1) or
-  newer, which added the Galaxy Watch sync. The phone and watch apps only connect when they are signed with the same
-  key (the APKs on the two repositories' Releases pages match).
+- The phone and watch apps only connect when they are signed with the same key. Use these versions together
+  (latest: phone app **v2026.11.21-1**, watch app **v1.0.1**, as of 2026-11-21):
+
+  | Watch app | Compatible phone app |
+  |---|---|
+  | v1.0.1 | v2026.10.27-2, v2026.10.27-3, v2026.11.06-1, v2026.11.06-2, v2026.11.21-1 |
+  | v1.0.0 | v2026.10.23-1, v2026.10.27-1 |
 - With the watch app installed, phone notifications are not copied to the watch; only the notifications the watch app
   shows itself appear.
 - Tested on Wear OS 6 (Galaxy Watch 8) and newer.
 
 ## Install (without a PC)
 
-1. Phone: download the phone APK from the
-   [Noterly releases](https://github.com/lhh9799/noterly/releases/tag/v2026.10.23-1) and install it (the first time,
-   allow your browser or file app to install unknown apps).
+1. Phone: download the phone APK from the latest
+   [Noterly release](https://github.com/lhh9799/noterly/releases/latest) and install it (the first time, allow your
+   browser or file app to install unknown apps).
 2. On the phone, download the watch APK (`noterly-watch-*.apk`) from this repository's
    [Releases](https://github.com/lhh9799/noterly-watch/releases).
 3. Watch: go to Settings → About watch → Software information and tap Software version 7 times to turn on Developer
