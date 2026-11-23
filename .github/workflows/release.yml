@@ -7,13 +7,35 @@
 # rotation lineage, so it installs over every earlier release and connects to the phone app, which has the same key.
 # The keys come from repository secrets, set with the phone repo's scripts/set-ci-secrets.ps1 -Repo lhh9799/noterly-watch.
 # The APK goes straight to the Release, not to an Actions artifact, so it uses none of the Actions storage quota.
+# Only changes to the app, its build or this workflow run it: documentation (README, docs/, screenshots) does not.
 name: Release
 
 on:
   push:
     branches: [main]
+    paths:
+      - 'wear/**'
+      - 'wearshared/**'
+      - 'gradle/**'
+      - 'build.gradle.kts'
+      - 'settings.gradle.kts'
+      - 'gradle.properties'
+      - 'gradlew'
+      - 'gradlew.bat'
+      - '.github/workflows/release.yml'
   pull_request:
     branches: [develop, main]
+    # The same paths as for push
+    paths:
+      - 'wear/**'
+      - 'wearshared/**'
+      - 'gradle/**'
+      - 'build.gradle.kts'
+      - 'settings.gradle.kts'
+      - 'gradle.properties'
+      - 'gradlew'
+      - 'gradlew.bat'
+      - '.github/workflows/release.yml'
   workflow_dispatch:
     inputs:
       dry_run:
