@@ -7,15 +7,15 @@
 > 원작 [Noterly](https://github.com/tomc128/noterly)(Tom Chapman, TDS Studios)를 바탕으로 만든 **개인 포크**이며, TDS Studios와는 관계가 없습니다. 라이선스는 [아래](#라이선스)를 보세요.
 
 <p>
-  <img src="docs/screenshots/list.png" width="200" alt="목록">
-  <img src="docs/screenshots/detail.png" width="200" alt="상세">
-  <img src="docs/screenshots/notification.png" width="200" alt="알림">
-  <img src="docs/screenshots/tile.png" width="200" alt="타일">
+  <img src="docs/screenshots/ko/list.png" width="200" alt="목록">
+  <img src="docs/screenshots/ko/detail.png" width="200" alt="상세">
+  <img src="docs/screenshots/ko/notification.png" width="200" alt="알림">
+  <img src="docs/screenshots/ko/tile.png" width="200" alt="타일">
 </p>
 
 ## 기능
 
-- **알림 목록**: 폰의 알림이 그대로 보이고, 폰처럼 Shown immediately·Scheduled·Repeating으로 나뉘며 각각 다음 알림 시각 순으로 정렬됩니다. 반복 알림은 다음 몇 회차를 함께 보여 줍니다.
+- **알림 목록**: 폰의 알림이 그대로 보이고, 폰처럼 바로 표시·예약됨·반복으로 나뉘며 각각 다음 알림 시각 순으로 정렬됩니다. 반복 알림은 다음 몇 회차를 함께 보여 줍니다.
 - **워치 알림**: 정해진 시각에 워치가 직접 진동과 함께 알림을 띄웁니다. 폰이 멀리 있거나 꺼져 있어도 울립니다.
 - **완료·스누즈**: 알림이나 상세 화면에서 바로 처리하면 폰에도 반영됩니다. 반복 알림은 다음 회차로 넘어갑니다.
 - **추가·편집**: 제목, 시각(없으면 바로 알림), 반복(매일·매주·요일 선택 등), 색상을 워치에서 정할 수 있습니다.
