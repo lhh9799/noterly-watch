@@ -47,32 +47,38 @@ object Format {
             dateTime != null -> parts += time(context, dateTime)
             else -> parts += context.getString(R.string.list_now)
         }
-        item.repetitionData?.let { parts += repeatLabel(item) }
+        item.repetitionData?.let { parts += repeatLabel(context, item) }
         return parts.joinToString(" · ")
     }
 
-    /** The phone's own wording when it sent one, otherwise the same wording worked out here (English, like the phone). */
-    fun repeatLabel(item: NoteItem): String = item.repeatLabel ?: item.repetitionData?.let(::repeatLabel).orEmpty()
+    /** The phone's own wording when it sent one (in the phone app's language), otherwise the same wording worked out here. */
+    fun repeatLabel(context: Context, item: NoteItem): String =
+        item.repeatLabel ?: item.repetitionData?.let { repeatLabel(context, it) }.orEmpty()
 
-    fun repeatLabel(repetition: RepetitionData): String {
+    fun repeatLabel(context: Context, repetition: RepetitionData): String {
         val n = repetition.number
         val interval = if (n == 1) {
-            when (repetition.repetition) {
-                Repetition.HOURLY -> "hourly"
-                Repetition.DAILY -> "daily"
-                Repetition.WEEKLY -> "weekly"
-                Repetition.MONTHLY -> "monthly"
-                Repetition.YEARLY -> "yearly"
-            }
+            context.getString(
+                when (repetition.repetition) {
+                    Repetition.HOURLY -> R.string.repeat_summary_hourly
+                    Repetition.DAILY -> R.string.repeat_summary_daily
+                    Repetition.WEEKLY -> R.string.repeat_summary_weekly
+                    Repetition.MONTHLY -> R.string.repeat_summary_monthly
+                    Repetition.YEARLY -> R.string.repeat_summary_yearly
+                },
+            )
         } else {
-            val unit = when (repetition.repetition) {
-                Repetition.HOURLY -> "hours"
-                Repetition.DAILY -> "days"
-                Repetition.WEEKLY -> "weeks"
-                Repetition.MONTHLY -> "months"
-                Repetition.YEARLY -> "years"
-            }
-            "every $n $unit"
+            context.resources.getQuantityString(
+                when (repetition.repetition) {
+                    Repetition.HOURLY -> R.plurals.repeat_summary_every_hours
+                    Repetition.DAILY -> R.plurals.repeat_summary_every_days
+                    Repetition.WEEKLY -> R.plurals.repeat_summary_every_weeks
+                    Repetition.MONTHLY -> R.plurals.repeat_summary_every_months
+                    Repetition.YEARLY -> R.plurals.repeat_summary_every_years
+                },
+                n,
+                n,
+            )
         }
         if (!repetition.hasWeekdays) return interval
         return "$interval (${weekdaysInLocaleOrder().filter { it.value in repetition.weekdays }.joinToString(", ") { shortDay(it) }})"

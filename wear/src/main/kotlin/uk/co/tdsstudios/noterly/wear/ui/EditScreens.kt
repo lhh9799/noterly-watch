@@ -97,7 +97,7 @@ fun EditScreen(
                 onClick = onRepeat,
                 modifier = Modifier.fillMaxWidth(),
                 label = { Text(stringResource(R.string.edit_repeat)) },
-                secondaryLabel = { Text(draft.repetition?.let(Format::repeatLabel) ?: stringResource(R.string.repeat_none)) },
+                secondaryLabel = { Text(draft.repetition?.let { Format.repeatLabel(context, it) } ?: stringResource(R.string.repeat_none)) },
             )
         }
         item {
@@ -212,7 +212,16 @@ fun RepeatScreen(repetition: RepetitionData?, onChange: (RepetitionData?) -> Uni
                         label = { Text("−") },
                     )
                     Text(
-                        stringResource(R.string.repeat_every, repetition.number),
+                        stringResource(
+                            when (repetition.repetition) {
+                                Repetition.HOURLY -> R.string.repeat_every_hours
+                                Repetition.DAILY -> R.string.repeat_every_days
+                                Repetition.WEEKLY -> R.string.repeat_every_weeks
+                                Repetition.MONTHLY -> R.string.repeat_every_months
+                                Repetition.YEARLY -> R.string.repeat_every_years
+                            },
+                            repetition.number,
+                        ),
                         modifier = Modifier.width(72.dp),
                         textAlign = TextAlign.Center,
                     )

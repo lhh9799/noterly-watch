@@ -152,8 +152,10 @@ The repeat test cases (`wearshared/src/test/resources/recurrence_cases.json`) ar
   whose repeat was changed on the watch.
 - `appliedCommands` (IDs of recent commands the phone applied or ignored) was added to the snapshot, so the watch knows
   when to drop a pending command.
-- The app's text is in English, like the phone app (the phone app has no Korean translation either, and adding
-  translations is a non-goal in the spec).
+- The app's text follows the watch's language: English, or Korean (`values-ko`, worded like the phone app's Korean
+  translation). Translations were a non-goal in the spec and were added later. As in the spec, a reminder's repeat
+  description comes from the phone, in the phone app's language; the watch words it itself only for a repeat changed on
+  the watch. Korean lines break only between words (phrase line breaking in the theme's text styles).
 
 
 ## License
