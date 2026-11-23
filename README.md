@@ -35,12 +35,12 @@ your wrist, mark them as done or snooze them, and add new ones without taking ou
 - **The Noterly phone app is required.** The watch app installs without it, in any order, but the phone app holds the
   reminders: without it the list stays empty and reminders added on the watch are not saved.
 - The phone and watch apps only connect when they are signed with the same key. Use these versions together
-  (latest: phone app **v2026.11.21-1**, watch app **v1.0.1**, as of 2026-11-21):
+  (latest: phone app **v1.11.0**, watch app **v1.0.1**, as of 2026-11-23):
 
   | Watch app | Compatible phone app |
   |---|---|
-  | v1.0.1 | v2026.10.27-2, v2026.10.27-3, v2026.11.06-1, v2026.11.06-2, v2026.11.21-1 |
-  | v1.0.0 | v2026.10.23-1, v2026.10.27-1 |
+  | v1.0.1 | v1.8.1, v1.8.2, v1.9.0, v1.10.0, v1.11.0 |
+  | v1.0.0 | v1.7.0, v1.8.0 |
 - With the watch app installed, phone notifications are not copied to the watch; only the notifications the watch app
   shows itself appear.
 - Tested on Wear OS 6 (Galaxy Watch 8) and newer.
