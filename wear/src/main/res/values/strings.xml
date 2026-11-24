@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Wording follows the phone app's English strings; the phone app has no Korean translation either -->
+    <!-- Wording follows the phone app's English strings; values-ko follows the phone app's Korean ones -->
     <string name="tile_label">Noterly</string>
     <string name="complication_label">Next reminder</string>
 
@@ -51,8 +51,39 @@
     <string name="repeat_weekly">Weekly</string>
     <string name="repeat_monthly">Monthly</string>
     <string name="repeat_yearly">Yearly</string>
-    <string name="repeat_every">Every %1$d</string>
+    <!-- Between the − and + buttons, under the repeat type picked above -->
+    <string name="repeat_every_hours">Every %1$d</string>
+    <string name="repeat_every_days">Every %1$d</string>
+    <string name="repeat_every_weeks">Every %1$d</string>
+    <string name="repeat_every_months">Every %1$d</string>
+    <string name="repeat_every_years">Every %1$d</string>
     <string name="repeat_days_of_week">Days of the week</string>
+    <!-- Repeat descriptions, such as "every 2 days (Mon, Wed)", worked out on the watch when the phone has not sent its own -->
+    <string name="repeat_summary_hourly">hourly</string>
+    <string name="repeat_summary_daily">daily</string>
+    <string name="repeat_summary_weekly">weekly</string>
+    <string name="repeat_summary_monthly">monthly</string>
+    <string name="repeat_summary_yearly">yearly</string>
+    <plurals name="repeat_summary_every_hours">
+        <item quantity="one">every %1$d hour</item>
+        <item quantity="other">every %1$d hours</item>
+    </plurals>
+    <plurals name="repeat_summary_every_days">
+        <item quantity="one">every %1$d day</item>
+        <item quantity="other">every %1$d days</item>
+    </plurals>
+    <plurals name="repeat_summary_every_weeks">
+        <item quantity="one">every %1$d week</item>
+        <item quantity="other">every %1$d weeks</item>
+    </plurals>
+    <plurals name="repeat_summary_every_months">
+        <item quantity="one">every %1$d month</item>
+        <item quantity="other">every %1$d months</item>
+    </plurals>
+    <plurals name="repeat_summary_every_years">
+        <item quantity="one">every %1$d year</item>
+        <item quantity="other">every %1$d years</item>
+    </plurals>
     <string name="repeat_done">Done</string>
 
     <string name="delete_confirm">Delete this reminder?</string>

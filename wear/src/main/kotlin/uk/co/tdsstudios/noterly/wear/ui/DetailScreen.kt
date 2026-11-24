@@ -60,7 +60,7 @@ fun DetailScreen(
             item { CenteredNote(stringResource(R.string.list_snoozed_until, Format.time(context, snoozed))) }
         }
         if (note.isRepeating) {
-            item { CenteredNote(Format.repeatLabel(note)) }
+            item { CenteredNote(Format.repeatLabel(context, note)) }
         }
         if (waitingForPhone) {
             item { CenteredNote(stringResource(R.string.list_waiting_for_phone)) }

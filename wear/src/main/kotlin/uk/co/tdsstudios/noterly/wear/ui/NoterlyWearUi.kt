@@ -4,8 +4,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.style.LineBreak
 import androidx.wear.compose.material3.AppScaffold
 import androidx.wear.compose.material3.MaterialTheme
+import androidx.wear.compose.material3.Typography
 import androidx.wear.compose.navigation.SwipeDismissableNavHost
 import androidx.wear.compose.navigation.composable
 import androidx.wear.compose.navigation.rememberSwipeDismissableNavController
@@ -24,6 +27,32 @@ object Routes {
 
     fun detail(id: String) = "detail/$id"
     fun delete(id: String) = "delete/$id"
+}
+
+/**
+ * Android breaks Korean lines between any two syllables, splitting words on the narrow screen. Phrase word breaking
+ * breaks Korean only at spaces (like the phone app); other languages are not affected.
+ */
+private fun Typography.withWordLineBreaks(): Typography {
+    fun TextStyle.words(): TextStyle {
+        val base = if (lineBreak == LineBreak.Unspecified) LineBreak.Simple else lineBreak // Compose's default
+        return copy(lineBreak = base.copy(wordBreak = LineBreak.WordBreak.Phrase))
+    }
+    return copy(
+        displayLarge = displayLarge.words(),
+        displayMedium = displayMedium.words(),
+        displaySmall = displaySmall.words(),
+        titleLarge = titleLarge.words(),
+        titleMedium = titleMedium.words(),
+        titleSmall = titleSmall.words(),
+        labelLarge = labelLarge.words(),
+        labelMedium = labelMedium.words(),
+        labelSmall = labelSmall.words(),
+        bodyLarge = bodyLarge.words(),
+        bodyMedium = bodyMedium.words(),
+        bodySmall = bodySmall.words(),
+        bodyExtraSmall = bodyExtraSmall.words(),
+    )
 }
 
 @Composable
@@ -46,7 +75,7 @@ fun NoterlyWearUi(viewModel: WatchViewModel, openItem: MutableStateFlow<String?>
         openNew.value = false
     }
 
-    MaterialTheme {
+    MaterialTheme(typography = MaterialTheme.typography.withWordLineBreaks()) {
         AppScaffold {
             SwipeDismissableNavHost(navController = navController, startDestination = Routes.LIST) {
                 composable(Routes.LIST) {

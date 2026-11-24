@@ -35,11 +35,12 @@ your wrist, mark them as done or snooze them, and add new ones without taking ou
 - **The Noterly phone app is required.** The watch app installs without it, in any order, but the phone app holds the
   reminders: without it the list stays empty and reminders added on the watch are not saved.
 - The phone and watch apps only connect when they are signed with the same key. Use these versions together
-  (latest: phone app **v1.11.0**, watch app **v1.0.1**, as of 2026-11-23):
+  (latest: phone app **v1.16.1**, watch app **v1.1.0**, as of 2026-11-24):
 
   | Watch app | Compatible phone app |
   |---|---|
-  | v1.0.1 | v1.8.1, v1.8.2, v1.9.0, v1.10.0, v1.11.0 |
+  | v1.1.0 | v1.8.1, v1.8.2, v1.9.0, v1.10.0, v1.11.0, v1.12.0, v1.12.1, v1.13.0, v1.14.0, v1.15.0, v1.15.1, v1.15.2, v1.16.0, v1.16.1 |
+  | v1.0.1 | v1.8.1, v1.8.2, v1.9.0, v1.10.0, v1.11.0, v1.12.0, v1.12.1, v1.13.0, v1.14.0, v1.15.0, v1.15.1, v1.15.2, v1.16.0, v1.16.1 |
   | v1.0.0 | v1.7.0, v1.8.0 |
 - With the watch app installed, phone notifications are not copied to the watch; only the notifications the watch app
   shows itself appear.
@@ -152,8 +153,10 @@ The repeat test cases (`wearshared/src/test/resources/recurrence_cases.json`) ar
   whose repeat was changed on the watch.
 - `appliedCommands` (IDs of recent commands the phone applied or ignored) was added to the snapshot, so the watch knows
   when to drop a pending command.
-- The app's text is in English, like the phone app (the phone app has no Korean translation either, and adding
-  translations is a non-goal in the spec).
+- The app's text follows the watch's language: English, or Korean (`values-ko`, worded like the phone app's Korean
+  translation). Translations were a non-goal in the spec and were added later. As in the spec, a reminder's repeat
+  description comes from the phone, in the phone app's language; the watch words it itself only for a repeat changed on
+  the watch. Korean lines break only between words (phrase line breaking in the theme's text styles).
 
 
 ## License

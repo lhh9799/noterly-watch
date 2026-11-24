@@ -1,0 +1,189 @@
+# Builds, signs and publishes a GitHub Release of the watch app when a new version lands on main.
+#
+# The version is versionName in wear/build.gradle.kts (raise it, and versionCode, in the release PR). A push to main
+# whose version already has a release (tag vX.Y.Z) publishes nothing. Pull requests and manual dry runs build, test
+# and sign without publishing, to check a change before it is merged.
+# The APK is signed like the phone app's (lhh9799/noterly, scripts/sign-release.ps1): debug key -> release key with the
+# rotation lineage, so it installs over every earlier release and connects to the phone app, which has the same key.
+# The keys come from repository secrets, set with the phone repo's scripts/set-ci-secrets.ps1 -Repo lhh9799/noterly-watch.
+# The APK goes straight to the Release, not to an Actions artifact, so it uses none of the Actions storage quota.
+# Only changes to the app, its build or this workflow run it: documentation (README, docs/, screenshots) does not.
+name: Release
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'wear/**'
+      - 'wearshared/**'
+      - 'gradle/**'
+      - 'build.gradle.kts'
+      - 'settings.gradle.kts'
+      - 'gradle.properties'
+      - 'gradlew'
+      - 'gradlew.bat'
+      - '.github/workflows/release.yml'
+  pull_request:
+    branches: [develop, main]
+    # The same paths as for push
+    paths:
+      - 'wear/**'
+      - 'wearshared/**'
+      - 'gradle/**'
+      - 'build.gradle.kts'
+      - 'settings.gradle.kts'
+      - 'gradle.properties'
+      - 'gradlew'
+      - 'gradlew.bat'
+      - '.github/workflows/release.yml'
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Build and sign only, without creating a Release'
+        type: boolean
+        default: true
+
+concurrency:
+  # Releases run one at a time; a pull request's newer run replaces its older one
+  group: release-${{ github.event.pull_request.number || 'main' }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    defaults:
+      run:
+        shell: bash
+    env:
+      # SHA-256 of the release key certificate; the job fails rather than publish an APK signed with anything else
+      RELEASE_CERT_SHA256: 1e7a919cd9e5fd10015cc8170c03648f765a7521c832e35cd8fad1a3559c2658
+      GH_REPO: ${{ github.repository }}
+      PUBLISH: ${{ github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && !inputs.dry_run) }}
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      - name: Version
+        id: version
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          name=$(sed -nE 's/^ *versionName = "([^"]+)".*/\1/p' wear/build.gradle.kts | head -1)
+          code=$(sed -nE 's/^ *versionCode = ([0-9]+).*/\1/p' wear/build.gradle.kts | head -1)
+          [[ "$name" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]] || { echo "::error::versionName '$name' must look like 1.2.3"; exit 1; }
+          [ -n "$code" ] || { echo "::error::No versionCode in wear/build.gradle.kts"; exit 1; }
+          tag="v$name"
+          skip=false
+          if [ "$PUBLISH" = true ] && gh release view "$tag" >/dev/null 2>&1; then
+            echo "::notice::$tag is already released; raise versionName to publish a new release"
+            skip=true
+          fi
+          # The newest earlier release, for the notes
+          prev=$(git tag --list 'v*' --sort=-v:refname | grep -vx "$tag" | head -1 || true)
+          { echo "name=$name"; echo "code=$code"; echo "tag=$tag"; echo "prev=$prev"; echo "skip=$skip"; } >> "$GITHUB_OUTPUT"
+          echo "Version $tag ($code), previous release ${prev:-none}"
+
+      - uses: actions/setup-java@v5
+        if: steps.version.outputs.skip != 'true'
+        with:
+          distribution: temurin
+          java-version: '17'
+          cache: gradle
+
+      - name: Restore signing keys
+        if: steps.version.outputs.skip != 'true'
+        env:
+          RELEASE_KEYSTORE: ${{ secrets.NOTERLY_RELEASE_KEYSTORE }}
+          LINEAGE: ${{ secrets.NOTERLY_LINEAGE }}
+          DEBUG_KEYSTORE: ${{ secrets.NOTERLY_DEBUG_KEYSTORE }}
+        run: |
+          for name in RELEASE_KEYSTORE LINEAGE DEBUG_KEYSTORE; do
+            [ -n "${!name}" ] || { echo "::error::Secret for $name is missing. Run scripts/set-ci-secrets.ps1 -Repo $GH_REPO in the phone repo."; exit 1; }
+          done
+          mkdir -p "$RUNNER_TEMP/keys" ~/.android
+          echo "$RELEASE_KEYSTORE" | base64 -d > "$RUNNER_TEMP/keys/release.jks"
+          echo "$LINEAGE" | base64 -d > "$RUNNER_TEMP/keys/noterly.lineage"
+          # The old debug key is the first signer of the lineage (and Gradle signs the build with it)
+          echo "$DEBUG_KEYSTORE" | base64 -d > ~/.android/debug.keystore
+
+      - name: Test and build
+        if: steps.version.outputs.skip != 'true'
+        env:
+          NAME: ${{ steps.version.outputs.name }}
+          CODE: ${{ steps.version.outputs.code }}
+        run: |
+          ./gradlew --no-daemon :wearshared:test :wear:assembleDevRelease
+          apk=wear/build/outputs/apk/dev/release/wear-dev-release.apk
+          [ -f "$apk" ] || { echo "::error::No APK"; ls -R wear/build/outputs/apk; exit 1; }
+          aapt2="$(ls -d "$ANDROID_HOME"/build-tools/* | sort -V | tail -1)/aapt2"
+          badging="$("$aapt2" dump badging "$apk")"
+          grep -m1 '^package:' <<<"$badging"
+          # The dev flavour adds "-dev" to versionName, as in every earlier release
+          grep -q "^package: name='uk.co.tdsstudios.noterly.dev' versionCode='$CODE' versionName='$NAME-dev'" <<<"$badging" \
+            || { echo "::error::The APK does not carry version $NAME ($CODE)"; exit 1; }
+
+      - name: Sign
+        if: steps.version.outputs.skip != 'true'
+        env:
+          KS_PASS: ${{ secrets.NOTERLY_KEYSTORE_PASSWORD }}
+        run: |
+          [ -n "$KS_PASS" ] || { echo "::error::NOTERLY_KEYSTORE_PASSWORD is missing. Run scripts/set-ci-secrets.ps1 -Repo $GH_REPO in the phone repo."; exit 1; }
+          export KS_PASS="$(printf '%s' "$KS_PASS" | tr -d '\r\n')"
+          apksigner="$(ls -d "$ANDROID_HOME"/build-tools/* | sort -V | tail -1)/apksigner"
+          "$apksigner" sign \
+            --ks ~/.android/debug.keystore --ks-key-alias androiddebugkey --ks-pass pass:android --key-pass pass:android \
+            --next-signer --ks "$RUNNER_TEMP/keys/release.jks" --ks-key-alias noterly --ks-pass env:KS_PASS \
+            --lineage "$RUNNER_TEMP/keys/noterly.lineage" \
+            --out "$RUNNER_TEMP/signed.apk" wear/build/outputs/apk/dev/release/wear-dev-release.apk
+          "$apksigner" verify --print-certs "$RUNNER_TEMP/signed.apk" | tee "$RUNNER_TEMP/certs.txt"
+          # The certificates' SHA-256 digests only: the lines' prefix ("Signer #1", "V3.0 Signer") depends on the apksigner
+          # version
+          grep -oE 'certificate SHA-256 digest: [0-9a-f]+' "$RUNNER_TEMP/certs.txt" | sort -u \
+            | grep -qx "certificate SHA-256 digest: $RELEASE_CERT_SHA256" \
+            || { echo "::error::The APK is not signed with the release key"; exit 1; }
+
+      - name: Remove signing keys
+        if: always()
+        run: rm -rf "$RUNNER_TEMP/keys" ~/.android/debug.keystore
+
+      - name: Publish
+        if: steps.version.outputs.skip != 'true' && env.PUBLISH == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          NAME: ${{ steps.version.outputs.name }}
+          TAG: ${{ steps.version.outputs.tag }}
+          PREV: ${{ steps.version.outputs.prev }}
+        run: |
+          apk="$RUNNER_TEMP/noterly-watch-$NAME.apk"
+          mv "$RUNNER_TEMP/signed.apk" "$apk"
+          notes="$RUNNER_TEMP/notes.md"
+          {
+            echo "## Noterly Watch $NAME"
+            echo
+            echo "## Changes"
+            echo
+            # Commit subjects since the previous release, without merges and housekeeping
+            git log --no-merges --format='- %s (%h)' ${PREV:+"$PREV"..}HEAD \
+              | grep -vE '^- (docs|chore|ci|build|test|style)(\(|:)' || echo "- Maintenance only"
+            echo
+            echo "## Compatible phone app versions"
+            echo
+            echo "| Phone app | Compatible | Notes |"
+            echo "| --- | --- | --- |"
+            echo "| [v1.8.1](https://github.com/lhh9799/noterly/releases/tag/v1.8.1) or newer | ✅ | Signed with the same release key |"
+            echo "| [v1.8.0](https://github.com/lhh9799/noterly/releases/tag/v1.8.0) or older | ❌ | Signed with the debug key, so connecting is not guaranteed → update the phone app to v1.8.1 or newer |"
+            echo
+            echo "## Signing"
+            echo
+            echo "- Current signing certificate SHA-256: \`$RELEASE_CERT_SHA256\`"
+            echo "- Built and signed by GitHub Actions (commit ${GITHUB_SHA::7})."
+            echo
+            echo "See the [README](https://github.com/$GH_REPO#readme) for how to install."
+          } > "$notes"
+          cat "$notes"
+          gh release create "$TAG" "$apk" --target "$GITHUB_SHA" --title "Noterly Watch $NAME" --notes-file "$notes"
