@@ -4,7 +4,6 @@
     <string name="tile_label">Noterly</string>
     <string name="complication_label">다음 리마인더</string>
 
-    <string name="list_title">리마인더</string>
     <string name="list_empty">리마인더 없음</string>
     <string name="list_last_synced">마지막 동기화: %1$s</string>
     <string name="list_never_synced">아직 휴대폰과 동기화하지 않음</string>
@@ -16,6 +15,7 @@
     <string name="list_section_immediate">바로 표시</string>
     <string name="list_section_scheduled">예약됨</string>
     <string name="list_section_repeating">반복</string>
+    <string name="repeats">%1$s 반복</string>
 
     <string name="detail_done">완료</string>
     <string name="detail_snooze">다시 알림</string>
@@ -27,24 +27,32 @@
 
     <string name="archive_title">보관함</string>
     <string name="archive_empty">완료한 리마인더 없음</string>
+    <string name="archive_archived">%1$s에 보관됨</string>
+    <string name="archive_today">오늘 %1$s</string>
+    <string name="archive_yesterday">어제 %1$s</string>
+    <string name="archive_day_and_time">%1$s %2$s</string>
 
-    <string name="edit_new_title">새 알림</string>
-    <string name="edit_title">수정</string>
+    <string name="edit_new_title">알림 만들기</string>
+    <string name="edit_title">알림 수정</string>
     <string name="edit_title_hint">제목</string>
-    <string name="edit_title_empty">눌러서 제목 입력</string>
-    <string name="edit_time">시간</string>
+    <string name="edit_title_empty">눌러서 입력</string>
+    <string name="edit_time">알림 시간</string>
     <string name="edit_colour">색상</string>
     <string name="edit_colour_hint">눌러서 다른 색상 선택</string>
-    <string name="edit_repeat">반복</string>
+    <string name="edit_repeat">반복 주기</string>
     <string name="edit_save">저장</string>
     <string name="edit_create">만들기</string>
+    <string name="edit_section_details">알림</string>
+    <string name="edit_section_timing">시간</string>
 
+    <string name="time_title">시간</string>
     <string name="time_now">지금</string>
     <string name="time_30_minutes">30분 후</string>
     <string name="time_1_hour">1시간 후</string>
     <string name="time_pick">시간 선택</string>
     <string name="time_keep">%1$s 유지</string>
 
+    <string name="repeat_title">반복 주기 선택</string>
     <string name="repeat_none">반복 안 함</string>
     <string name="repeat_hourly">매시간</string>
     <string name="repeat_daily">매일</string>
@@ -52,13 +60,15 @@
     <string name="repeat_monthly">매월</string>
     <string name="repeat_yearly">매년</string>
     <!-- Only the interval: "12개월마다" does not fit between the − and + buttons -->
-    <string name="repeat_every_hours">%1$d시간</string>
-    <string name="repeat_every_days">%1$d일</string>
-    <string name="repeat_every_weeks">%1$d주</string>
-    <string name="repeat_every_months">%1$d개월</string>
-    <string name="repeat_every_years">%1$d년</string>
+    <string name="repeat_interval">간격</string>
+    <plurals name="repeat_every_hours"><item quantity="other">%1$d시간</item></plurals>
+    <plurals name="repeat_every_days"><item quantity="other">%1$d일</item></plurals>
+    <plurals name="repeat_every_weeks"><item quantity="other">%1$d주</item></plurals>
+    <plurals name="repeat_every_months"><item quantity="other">%1$d개월</item></plurals>
+    <plurals name="repeat_every_years"><item quantity="other">%1$d년</item></plurals>
+    <string name="repeat_decrease">간격 줄이기</string>
+    <string name="repeat_increase">간격 늘리기</string>
     <string name="repeat_days_of_week">요일</string>
-    <string name="repeat_done">완료</string>
     <string name="repeat_summary_hourly">매시간</string>
     <string name="repeat_summary_daily">매일</string>
     <string name="repeat_summary_weekly">매주</string>
@@ -71,7 +81,8 @@
     <plurals name="repeat_summary_every_years"><item quantity="other">%1$d년마다</item></plurals>
 
     <string name="delete_confirm">이 리마인더를 삭제할까요?</string>
-    <string name="delete_cancel">취소</string>
+    <string name="cancel">취소</string>
+    <string name="ok">확인</string>
 
     <string name="notification_channel">리마인더</string>
     <string name="notification_channel_description">휴대폰이 연결되지 않았을 때 워치가 표시하는 리마인더</string>
