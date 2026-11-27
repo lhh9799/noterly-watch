@@ -75,7 +75,7 @@ fun NoterlyWearUi(viewModel: WatchViewModel, openItem: MutableStateFlow<String?>
         openNew.value = false
     }
 
-    MaterialTheme(typography = MaterialTheme.typography.withWordLineBreaks()) {
+    MaterialTheme(colorScheme = NoterlyColorScheme, typography = MaterialTheme.typography.withWordLineBreaks()) {
         AppScaffold {
             SwipeDismissableNavHost(navController = navController, startDestination = Routes.LIST) {
                 composable(Routes.LIST) {
@@ -170,8 +170,11 @@ fun NoterlyWearUi(viewModel: WatchViewModel, openItem: MutableStateFlow<String?>
                 composable(Routes.REPEAT) {
                     RepeatScreen(
                         repetition = viewModel.draft.repetition,
-                        onChange = { repetition -> viewModel.updateDraft { it.copy(repetition = repetition) } },
-                        onDone = { navController.popBackStack() },
+                        onConfirm = { repetition ->
+                            viewModel.updateDraft { it.copy(repetition = repetition) }
+                            navController.popBackStack()
+                        },
+                        onCancel = { navController.popBackStack() },
                     )
                 }
             }

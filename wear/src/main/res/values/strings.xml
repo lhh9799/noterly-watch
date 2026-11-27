@@ -4,7 +4,8 @@
     <string name="tile_label">Noterly</string>
     <string name="complication_label">Next reminder</string>
 
-    <string name="list_title">Reminders</string>
+    <!-- The app's name, like the title of the phone app's list -->
+    <string name="list_title" translatable="false">Noterly</string>
     <string name="list_empty">No reminders</string>
     <string name="list_last_synced">Last synced %1$s</string>
     <string name="list_never_synced">Not synced with the phone yet</string>
@@ -16,6 +17,8 @@
     <string name="list_section_immediate">Shown immediately</string>
     <string name="list_section_scheduled">Scheduled</string>
     <string name="list_section_repeating">Repeating</string>
+    <!-- Such as "Repeats every 2 days (Mon, Wed)" -->
+    <string name="repeats">Repeats %1$s</string>
 
     <string name="detail_done">Mark as done</string>
     <string name="detail_snooze">Snooze</string>
@@ -27,6 +30,12 @@
 
     <string name="archive_title">Archive</string>
     <string name="archive_empty">Nothing done yet</string>
+    <!-- Such as "Archived yesterday, 18:20" or "Archived Tuesday, 09:12" -->
+    <string name="archive_archived">Archived %1$s</string>
+    <string name="archive_today">today, %1$s</string>
+    <string name="archive_yesterday">yesterday, %1$s</string>
+    <!-- A day of the last week and the time -->
+    <string name="archive_day_and_time">%1$s, %2$s</string>
 
     <string name="edit_new_title">New note</string>
     <string name="edit_title">Edit</string>
@@ -38,25 +47,47 @@
     <string name="edit_repeat">Repeat</string>
     <string name="edit_save">Save</string>
     <string name="edit_create">Create</string>
+    <string name="edit_section_details">Notification details</string>
+    <string name="edit_section_timing">Timing</string>
 
+    <string name="time_title">Time</string>
     <string name="time_now">Now</string>
     <string name="time_30_minutes">In 30 minutes</string>
     <string name="time_1_hour">In 1 hour</string>
     <string name="time_pick">Choose a time</string>
     <string name="time_keep">Keep %1$s</string>
 
+    <string name="repeat_title">Repeat</string>
     <string name="repeat_none">Don\'t repeat</string>
     <string name="repeat_hourly">Hourly</string>
     <string name="repeat_daily">Daily</string>
     <string name="repeat_weekly">Weekly</string>
     <string name="repeat_monthly">Monthly</string>
     <string name="repeat_yearly">Yearly</string>
-    <!-- Between the − and + buttons, under the repeat type picked above -->
-    <string name="repeat_every_hours">Every %1$d</string>
-    <string name="repeat_every_days">Every %1$d</string>
-    <string name="repeat_every_weeks">Every %1$d</string>
-    <string name="repeat_every_months">Every %1$d</string>
-    <string name="repeat_every_years">Every %1$d</string>
+    <!-- The interval between the − and + buttons, in a box labelled repeat_interval: "Every" / "2 weeks" -->
+    <string name="repeat_interval">Every</string>
+    <plurals name="repeat_every_hours">
+        <item quantity="one">%1$d hour</item>
+        <item quantity="other">%1$d hours</item>
+    </plurals>
+    <plurals name="repeat_every_days">
+        <item quantity="one">%1$d day</item>
+        <item quantity="other">%1$d days</item>
+    </plurals>
+    <plurals name="repeat_every_weeks">
+        <item quantity="one">%1$d week</item>
+        <item quantity="other">%1$d weeks</item>
+    </plurals>
+    <plurals name="repeat_every_months">
+        <item quantity="one">%1$d month</item>
+        <item quantity="other">%1$d months</item>
+    </plurals>
+    <plurals name="repeat_every_years">
+        <item quantity="one">%1$d year</item>
+        <item quantity="other">%1$d years</item>
+    </plurals>
+    <string name="repeat_decrease">Decrease interval</string>
+    <string name="repeat_increase">Increase interval</string>
     <string name="repeat_days_of_week">Days of the week</string>
     <!-- Repeat descriptions, such as "every 2 days (Mon, Wed)", worked out on the watch when the phone has not sent its own -->
     <string name="repeat_summary_hourly">hourly</string>
@@ -84,10 +115,10 @@
         <item quantity="one">every %1$d year</item>
         <item quantity="other">every %1$d years</item>
     </plurals>
-    <string name="repeat_done">Done</string>
 
     <string name="delete_confirm">Delete this reminder?</string>
-    <string name="delete_cancel">Cancel</string>
+    <string name="cancel">Cancel</string>
+    <string name="ok">OK</string>
 
     <string name="notification_channel">Reminders</string>
     <string name="notification_channel_description">Reminders shown by the watch while the phone is not connected</string>

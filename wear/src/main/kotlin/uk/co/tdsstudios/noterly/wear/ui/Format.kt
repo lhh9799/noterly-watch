@@ -12,6 +12,7 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.time.format.TextStyle
+import java.time.temporal.ChronoUnit
 import java.time.temporal.WeekFields
 import java.util.Locale
 
@@ -37,18 +38,22 @@ object Format {
     fun clock(context: Context, millis: Long): String =
         time(context, DartTime.fromInstant(java.time.Instant.ofEpochMilli(millis)))
 
-    /** The line under a reminder's title: when it notifies next, and whether it is snoozed or repeats. */
-    fun itemSummary(context: Context, item: NoteItem): String {
-        val parts = mutableListOf<String>()
-        val snoozed = DartTime.parseOrNull(item.snoozeDateTime)
-        val dateTime = DartTime.parseOrNull(item.dateTime)
-        when {
-            snoozed != null -> parts += context.getString(R.string.list_snoozed_until, time(context, snoozed))
-            dateTime != null -> parts += time(context, dateTime)
-            else -> parts += context.getString(R.string.list_now)
+    /**
+     * When something happened, like the phone app's archive: "today, 14:30", "yesterday, 14:30", the day of the week
+     * in the last week, otherwise the date.
+     */
+    fun pastTime(context: Context, dateTime: LocalDateTime): String {
+        val locale = Locale.getDefault()
+        val clock = if (DateFormat.is24HourFormat(context)) "Hm" else "hm"
+        fun format(skeleton: String) =
+            DateTimeFormatter.ofPattern(DateFormat.getBestDateTimePattern(locale, skeleton), locale).format(dateTime)
+        return when (ChronoUnit.DAYS.between(dateTime.toLocalDate(), LocalDate.now())) {
+            0L -> context.getString(R.string.archive_today, format(clock))
+            1L -> context.getString(R.string.archive_yesterday, format(clock))
+            // The phone's wording: the best pattern for both puts the Korean day in brackets
+            in 2L..6L -> context.getString(R.string.archive_day_and_time, format("EEEE"), format(clock))
+            else -> time(context, dateTime)
         }
-        item.repetitionData?.let { parts += repeatLabel(context, item) }
-        return parts.joinToString(" · ")
     }
 
     /** The phone's own wording when it sent one (in the phone app's language), otherwise the same wording worked out here. */
