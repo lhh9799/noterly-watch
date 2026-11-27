@@ -29,6 +29,10 @@ your wrist, mark them as done or snooze them, and add new ones without taking ou
 - **Tile and complication**: check the next reminder from the watch face and a tile.
 - **Offline**: what you do on the watch while the phone is disconnected is kept and applied to the phone once it
   reconnects.
+- **Languages**: the phone app's languages: English (UK and US), Korean, German, Greek, Spanish, French, Italian,
+  Polish, Russian and Ukrainian. If you pick a language for the phone app in Android's settings, the watch app uses it
+  too (phone app v1.17.0 or newer); otherwise it follows the watch's language, which a Galaxy Watch takes from the
+  phone.
 
 ## Good to know
 
@@ -153,8 +157,10 @@ The repeat test cases (`wearshared/src/test/resources/recurrence_cases.json`) ar
   whose repeat was changed on the watch.
 - `appliedCommands` (IDs of recent commands the phone applied or ignored) was added to the snapshot, so the watch knows
   when to drop a pending command.
-- The app's text follows the watch's language: English, or Korean (`values-ko`, worded like the phone app's Korean
-  translation). Translations were a non-goal in the spec and were added later. As in the spec, a reminder's repeat
+- The app's text is in the phone app's languages (`values-*`, worded like the phone app's translations where they fit
+  the watch). A language picked for the phone app comes in the snapshot as `settings.language` and becomes the watch
+  app's own language (Android's per-app language); without one the app follows the watch's language. Translations were
+  a non-goal in the spec and were added later. As in the spec, a reminder's repeat
   description comes from the phone, in the phone app's language; the watch words it itself only for a repeat changed on
   the watch. Korean lines break only between words (phrase line breaking in the theme's text styles).
 
