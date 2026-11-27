@@ -98,6 +98,8 @@ class WearRepository private constructor(private val context: Context) {
             .getOrNull() ?: return
         if (snapshot.schema > Snapshot.SCHEMA) Log.w(TAG, "Snapshot schema ${snapshot.schema} is newer than this app, reading what it can")
 
+        // NoterlyWearApp redraws the tile and complication once a new language applies
+        AppLanguage.follow(context, snapshot.settings.language)
         if (store.saveSnapshot(snapshot, System.currentTimeMillis())) {
             _phoneConnected.value = true
             refreshOutputs()
