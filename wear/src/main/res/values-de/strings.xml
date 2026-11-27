@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Follows the phone app's German wording (noterly/lib/l10n/app_de.arb) where it fits the watch -->
+    <string name="complication_label">Nächste Erinnerung</string>
+
+    <string name="list_empty">Keine Erinnerungen</string>
+    <string name="list_last_synced">Zuletzt synchronisiert: %1$s</string>
+    <string name="list_never_synced">Noch nicht mit dem Smartphone synchronisiert</string>
+    <string name="list_archive">Archiv</string>
+    <string name="list_new">Neue Notiz</string>
+    <string name="list_now">Jetzt</string>
+    <string name="list_snoozed_until">Aufgeschoben bis %1$s</string>
+    <string name="list_waiting_for_phone">Warten auf das Smartphone</string>
+    <string name="list_section_immediate">Sofort angezeigt</string>
+    <string name="list_section_scheduled">Geplant</string>
+    <string name="list_section_repeating">Wiederkehrend</string>
+    <string name="repeats">Wiederholt sich %1$s</string>
+
+    <string name="detail_done">Als erledigt markieren</string>
+    <string name="detail_snooze">Schlummern</string>
+    <string name="detail_edit">Bearbeiten</string>
+    <string name="detail_delete">Löschen</string>
+    <string name="detail_restore">Wiederherstellen</string>
+    <string name="detail_not_found">Diese Erinnerung ist nicht mehr in der Liste</string>
+    <string name="detail_immediate">Sofort angezeigt</string>
+
+    <string name="archive_title">Archiv</string>
+    <string name="archive_empty">Noch nichts erledigt</string>
+    <string name="archive_archived">Archiviert %1$s</string>
+    <string name="archive_today">heute, %1$s</string>
+    <string name="archive_yesterday">gestern, %1$s</string>
+    <string name="archive_day_and_time">%1$s, %2$s</string>
+
+    <string name="edit_new_title">Neue Notiz</string>
+    <string name="edit_title">Bearbeiten</string>
+    <string name="edit_title_hint">Titel</string>
+    <string name="edit_title_empty">Tippen, um einen Titel einzugeben</string>
+    <string name="edit_time">Uhrzeit</string>
+    <string name="edit_colour">Farbe</string>
+    <string name="edit_colour_hint">Für eine andere Farbe tippen</string>
+    <string name="edit_repeat">Wiederholen</string>
+    <string name="edit_save">Speichern</string>
+    <string name="edit_create">Erstellen</string>
+    <string name="edit_section_details">Details</string>
+    <string name="edit_section_timing">Zeitplan</string>
+
+    <string name="time_title">Uhrzeit</string>
+    <string name="time_now">Jetzt</string>
+    <string name="time_30_minutes">In 30 Minuten</string>
+    <string name="time_1_hour">In 1 Stunde</string>
+    <string name="time_pick">Uhrzeit wählen</string>
+    <string name="time_keep">%1$s beibehalten</string>
+
+    <string name="repeat_title">Wiederholen</string>
+    <string name="repeat_none">Nicht wiederholen</string>
+    <string name="repeat_hourly">Stündlich</string>
+    <string name="repeat_daily">Täglich</string>
+    <string name="repeat_weekly">Wöchentlich</string>
+    <string name="repeat_monthly">Monatlich</string>
+    <string name="repeat_yearly">Jährlich</string>
+    <string name="repeat_interval">Intervall</string>
+    <plurals name="repeat_every_hours">
+        <item quantity="one">%1$d Stunde</item>
+        <item quantity="other">%1$d Stunden</item>
+    </plurals>
+    <plurals name="repeat_every_days">
+        <item quantity="one">%1$d Tag</item>
+        <item quantity="other">%1$d Tage</item>
+    </plurals>
+    <plurals name="repeat_every_weeks">
+        <item quantity="one">%1$d Woche</item>
+        <item quantity="other">%1$d Wochen</item>
+    </plurals>
+    <plurals name="repeat_every_months">
+        <item quantity="one">%1$d Monat</item>
+        <item quantity="other">%1$d Monate</item>
+    </plurals>
+    <plurals name="repeat_every_years">
+        <item quantity="one">%1$d Jahr</item>
+        <item quantity="other">%1$d Jahre</item>
+    </plurals>
+    <string name="repeat_decrease">Intervall verkürzen</string>
+    <string name="repeat_increase">Intervall verlängern</string>
+    <string name="repeat_days_of_week">Wochentage</string>
+    <string name="repeat_summary_hourly">stündlich</string>
+    <string name="repeat_summary_daily">täglich</string>
+    <string name="repeat_summary_weekly">wöchentlich</string>
+    <string name="repeat_summary_monthly">monatlich</string>
+    <string name="repeat_summary_yearly">jährlich</string>
+    <plurals name="repeat_summary_every_hours">
+        <item quantity="one">jede Stunde</item>
+        <item quantity="other">alle %1$d Stunden</item>
+    </plurals>
+    <plurals name="repeat_summary_every_days">
+        <item quantity="one">jeden Tag</item>
+        <item quantity="other">alle %1$d Tage</item>
+    </plurals>
+    <plurals name="repeat_summary_every_weeks">
+        <item quantity="one">jede Woche</item>
+        <item quantity="other">alle %1$d Wochen</item>
+    </plurals>
+    <plurals name="repeat_summary_every_months">
+        <item quantity="one">jeden Monat</item>
+        <item quantity="other">alle %1$d Monate</item>
+    </plurals>
+    <plurals name="repeat_summary_every_years">
+        <item quantity="one">jedes Jahr</item>
+        <item quantity="other">alle %1$d Jahre</item>
+    </plurals>
+
+    <string name="delete_confirm">Diese Erinnerung löschen?</string>
+    <string name="cancel">Abbrechen</string>
+    <string name="ok">OK</string>
+
+    <string name="notification_channel">Erinnerungen</string>
+    <string name="notification_channel_description">Erinnerungen, die die Uhr anzeigt, solange das Smartphone nicht verbunden ist</string>
+    <string name="permission_needed">Erlaube Benachrichtigungen, damit Erinnerungen auch ohne Smartphone in der Nähe angezeigt werden</string>
+
+    <string name="tile_empty">Keine anstehenden Erinnerungen</string>
+    <string name="tile_new">Neu</string>
+</resources>

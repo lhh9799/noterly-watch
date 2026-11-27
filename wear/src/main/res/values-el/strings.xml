@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Follows the phone app's Greek wording (noterly/lib/l10n/app_el.arb) where it fits the watch -->
+    <string name="complication_label">Επόμενη υπενθύμιση</string>
+
+    <string name="list_empty">Καμία υπενθύμιση</string>
+    <string name="list_last_synced">Τελευταίος συγχρονισμός: %1$s</string>
+    <string name="list_never_synced">Δεν έχει συγχρονιστεί ακόμη με το τηλέφωνο</string>
+    <string name="list_archive">Αρχείο</string>
+    <string name="list_new">Νέα υπενθύμιση</string>
+    <string name="list_now">Τώρα</string>
+    <string name="list_snoozed_until">Σε αναβολή έως %1$s</string>
+    <string name="list_waiting_for_phone">Αναμονή για το τηλέφωνο</string>
+    <string name="list_section_immediate">Άμεσες</string>
+    <string name="list_section_scheduled">Προγραμματισμένες</string>
+    <string name="list_section_repeating">Επαναλαμβανόμενες</string>
+    <string name="repeats">Επαναλαμβάνεται %1$s</string>
+
+    <string name="detail_done">Ολοκλήρωση</string>
+    <string name="detail_snooze">Αναβολή</string>
+    <string name="detail_edit">Επεξεργασία</string>
+    <string name="detail_delete">Διαγραφή</string>
+    <string name="detail_restore">Επαναφορά</string>
+    <string name="detail_not_found">Αυτή η υπενθύμιση δεν υπάρχει πλέον στη λίστα</string>
+    <string name="detail_immediate">Άμεση εμφάνιση</string>
+
+    <string name="archive_title">Αρχείο</string>
+    <string name="archive_empty">Δεν έχει ολοκληρωθεί τίποτα ακόμη</string>
+    <string name="archive_archived">Αρχειοθετήθηκε %1$s</string>
+    <string name="archive_today">σήμερα, %1$s</string>
+    <string name="archive_yesterday">χθες, %1$s</string>
+    <string name="archive_day_and_time">%1$s, %2$s</string>
+
+    <string name="edit_new_title">Νέα υπενθύμιση</string>
+    <string name="edit_title">Επεξεργασία</string>
+    <string name="edit_title_hint">Τίτλος</string>
+    <string name="edit_title_empty">Πατήστε για να εισαγάγετε τίτλο</string>
+    <string name="edit_time">Ώρα</string>
+    <string name="edit_colour">Χρώμα</string>
+    <string name="edit_colour_hint">Πατήστε για άλλο χρώμα</string>
+    <string name="edit_repeat">Επανάληψη</string>
+    <string name="edit_save">Αποθήκευση</string>
+    <string name="edit_create">Δημιουργία</string>
+    <string name="edit_section_details">Λεπτομέρειες</string>
+    <string name="edit_section_timing">Χρόνος</string>
+
+    <string name="time_title">Ώρα</string>
+    <string name="time_now">Τώρα</string>
+    <string name="time_30_minutes">Σε 30 λεπτά</string>
+    <string name="time_1_hour">Σε 1 ώρα</string>
+    <string name="time_pick">Επιλέξτε ώρα</string>
+    <string name="time_keep">Διατήρηση: %1$s</string>
+
+    <string name="repeat_title">Επανάληψη</string>
+    <string name="repeat_none">Χωρίς επανάληψη</string>
+    <string name="repeat_hourly">Κάθε ώρα</string>
+    <string name="repeat_daily">Κάθε ημέρα</string>
+    <string name="repeat_weekly">Κάθε εβδομάδα</string>
+    <string name="repeat_monthly">Κάθε μήνα</string>
+    <string name="repeat_yearly">Κάθε χρόνο</string>
+    <string name="repeat_interval">Κάθε</string>
+    <plurals name="repeat_every_hours">
+        <item quantity="one">%1$d ώρα</item>
+        <item quantity="other">%1$d ώρες</item>
+    </plurals>
+    <plurals name="repeat_every_days">
+        <item quantity="one">%1$d ημέρα</item>
+        <item quantity="other">%1$d ημέρες</item>
+    </plurals>
+    <plurals name="repeat_every_weeks">
+        <item quantity="one">%1$d εβδομάδα</item>
+        <item quantity="other">%1$d εβδομάδες</item>
+    </plurals>
+    <plurals name="repeat_every_months">
+        <item quantity="one">%1$d μήνα</item>
+        <item quantity="other">%1$d μήνες</item>
+    </plurals>
+    <plurals name="repeat_every_years">
+        <item quantity="one">%1$d χρόνο</item>
+        <item quantity="other">%1$d χρόνια</item>
+    </plurals>
+    <string name="repeat_decrease">Μείωση διαστήματος</string>
+    <string name="repeat_increase">Αύξηση διαστήματος</string>
+    <string name="repeat_days_of_week">Ημέρες της εβδομάδας</string>
+    <string name="repeat_summary_hourly">κάθε ώρα</string>
+    <string name="repeat_summary_daily">κάθε ημέρα</string>
+    <string name="repeat_summary_weekly">κάθε εβδομάδα</string>
+    <string name="repeat_summary_monthly">κάθε μήνα</string>
+    <string name="repeat_summary_yearly">κάθε χρόνο</string>
+    <plurals name="repeat_summary_every_hours">
+        <item quantity="one">κάθε ώρα</item>
+        <item quantity="other">κάθε %1$d ώρες</item>
+    </plurals>
+    <plurals name="repeat_summary_every_days">
+        <item quantity="one">κάθε ημέρα</item>
+        <item quantity="other">κάθε %1$d ημέρες</item>
+    </plurals>
+    <plurals name="repeat_summary_every_weeks">
+        <item quantity="one">κάθε εβδομάδα</item>
+        <item quantity="other">κάθε %1$d εβδομάδες</item>
+    </plurals>
+    <plurals name="repeat_summary_every_months">
+        <item quantity="one">κάθε μήνα</item>
+        <item quantity="other">κάθε %1$d μήνες</item>
+    </plurals>
+    <plurals name="repeat_summary_every_years">
+        <item quantity="one">κάθε χρόνο</item>
+        <item quantity="other">κάθε %1$d χρόνια</item>
+    </plurals>
+
+    <string name="delete_confirm">Διαγραφή αυτής της υπενθύμισης;</string>
+    <string name="cancel">Ακύρωση</string>
+    <string name="ok">OK</string>
+
+    <string name="notification_channel">Υπενθυμίσεις</string>
+    <string name="notification_channel_description">Υπενθυμίσεις που εμφανίζει το ρολόι όταν το τηλέφωνο δεν είναι συνδεδεμένο</string>
+    <string name="permission_needed">Επιτρέψτε τις ειδοποιήσεις, ώστε οι υπενθυμίσεις να εμφανίζονται όταν το τηλέφωνο δεν είναι κοντά</string>
+
+    <string name="tile_empty">Δεν υπάρχουν επερχόμενες υπενθυμίσεις</string>
+    <string name="tile_new">Νέα</string>
+</resources>

@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Follows the phone app's Korean wording (noterly/lib/l10n/app_ko.arb) -->
-    <string name="tile_label">Noterly</string>
     <string name="complication_label">다음 리마인더</string>
 
     <string name="list_empty">리마인더 없음</string>

@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <!-- Wording follows the phone app's English strings; values-ko follows the phone app's Korean ones -->
-    <string name="tile_label">Noterly</string>
+<resources xmlns:tools="http://schemas.android.com/tools" tools:locale="en">
+    <!-- Wording follows the phone app's English strings, and each translation the phone app's in that language where it
+         fits the watch. values-en-rUS has the US spellings. -->
+    <string name="tile_label" translatable="false">Noterly</string>
     <string name="complication_label">Next reminder</string>
 
     <!-- The app's name, like the title of the phone app's list -->
