@@ -153,10 +153,13 @@ private fun DetailRow(icon: Painter, text: String, shape: Shape) {
     }
 }
 
-/** Asks before deleting, like the phone app's dialogs. The question is the second item, so the list centres it. */
+/**
+ * Asks before deleting, like the phone app's dialogs. It starts at the top, so both buttons are on screen even when
+ * their labels put them one under the other.
+ */
 @Composable
 fun DeleteScreen(onConfirm: () -> Unit, onCancel: () -> Unit) {
-    ScrollingScreen {
+    ScrollingScreen(startAtTop = true) {
         item {
             Icon(Icons.Outlined.Delete, contentDescription = null, modifier = Modifier.size(24.dp), tint = MaterialTheme.colorScheme.secondary)
         }

@@ -4,12 +4,15 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
@@ -26,6 +29,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.wear.compose.foundation.lazy.AutoCenteringParams
 import androidx.wear.compose.foundation.lazy.ScalingLazyColumn
 import androidx.wear.compose.foundation.lazy.ScalingLazyListScope
 import androidx.wear.compose.foundation.lazy.rememberScalingLazyListState
@@ -43,23 +47,26 @@ import uk.co.tdsstudios.noterly.wear.R
 /**
  * A scrolling screen. ScalingLazyColumn scrolls with the rotating bezel by default, and ScreenScaffold shows the time
  * and scroll indicator and keeps [edgeButton] at the bottom edge. Items are 2 dp apart, like the phone app's list
- * groups (see [groupShape]); [icon] and [subtitle] go with the title, like the phone app's dialogs.
+ * groups (see [groupShape]); [icon] and [subtitle] go with the title, like the phone app's dialogs. The list starts
+ * with its second item in the middle of the screen, or at the top with [startAtTop], like Wear's own dialogs.
  */
 @Composable
 fun ScrollingScreen(
     title: String? = null,
     icon: Painter? = null,
     subtitle: String? = null,
+    startAtTop: Boolean = false,
     edgeButton: (@Composable () -> Unit)? = null,
     content: ScalingLazyListScope.() -> Unit,
 ) {
-    val listState = rememberScalingLazyListState()
+    val listState = rememberScalingLazyListState(initialCenterItemIndex = if (startAtTop) 0 else 1)
     val column: @Composable (PaddingValues) -> Unit = { contentPadding ->
         ScalingLazyColumn(
             modifier = Modifier.fillMaxSize(),
             state = listState,
             contentPadding = contentPadding,
             verticalArrangement = Arrangement.spacedBy(2.dp),
+            autoCentering = if (startAtTop) null else AutoCenteringParams(),
         ) {
             if (title != null) item { ScreenTitle(title, icon, subtitle) }
             content()
@@ -154,23 +161,24 @@ fun DialogActions(
     modifier: Modifier = Modifier,
     confirmIcon: ImageVector? = null,
 ) {
-    Row(modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+    // Labels too long for one line (in some languages) put the confirming action below, like Wear's own dialogs
+    FlowRow(
+        modifier = modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.spacedBy(4.dp, Alignment.CenterHorizontally),
+        verticalArrangement = Arrangement.spacedBy(4.dp),
+    ) {
         ChildButton(
             onClick = onCancel,
-            modifier = Modifier.weight(1f),
             colors = ButtonDefaults.childButtonColors(contentColor = MaterialTheme.colorScheme.primary),
         ) {
-            Text(stringResource(R.string.cancel), modifier = Modifier.fillMaxWidth(), textAlign = TextAlign.Center)
+            Text(stringResource(R.string.cancel), maxLines = 1)
         }
-        Button(onClick = onConfirm, modifier = Modifier.weight(1.3f)) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(4.dp, Alignment.CenterHorizontally),
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                if (confirmIcon != null) Icon(confirmIcon, contentDescription = null, modifier = Modifier.size(18.dp))
-                Text(confirmLabel, maxLines = 1)
+        Button(onClick = onConfirm) {
+            if (confirmIcon != null) {
+                Icon(confirmIcon, contentDescription = null, modifier = Modifier.size(18.dp))
+                Spacer(Modifier.width(4.dp))
             }
+            Text(confirmLabel, maxLines = 1)
         }
     }
 }
