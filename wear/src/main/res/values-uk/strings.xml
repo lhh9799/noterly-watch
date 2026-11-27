@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Follows the phone app's Ukrainian wording (noterly/lib/l10n/app_uk.arb) where it fits the watch -->
+    <string name="complication_label">Наступне нагадування</string>
+
+    <string name="list_empty">Немає нагадувань</string>
+    <string name="list_last_synced">Остання синхронізація: %1$s</string>
+    <string name="list_never_synced">Ще не синхронізовано з телефоном</string>
+    <string name="list_archive">Архів</string>
+    <string name="list_new">Нова нотатка</string>
+    <string name="list_now">Зараз</string>
+    <string name="list_snoozed_until">Відкладено до %1$s</string>
+    <string name="list_waiting_for_phone">Очікування телефона</string>
+    <string name="list_section_immediate">Миттєві</string>
+    <string name="list_section_scheduled">Заплановані</string>
+    <string name="list_section_repeating">Повторювані</string>
+    <string name="repeats">Повторюється %1$s</string>
+
+    <string name="detail_done">Виконано</string>
+    <string name="detail_snooze">Відкласти</string>
+    <string name="detail_edit">Змінити</string>
+    <string name="detail_delete">Видалити</string>
+    <string name="detail_restore">Відновити</string>
+    <string name="detail_not_found">Цього нагадування більше немає у списку</string>
+    <string name="detail_immediate">Миттєво</string>
+
+    <string name="archive_title">Архів</string>
+    <string name="archive_empty">Поки нічого не виконано</string>
+    <string name="archive_archived">В архіві %1$s</string>
+    <string name="archive_today">сьогодні, %1$s</string>
+    <string name="archive_yesterday">учора, %1$s</string>
+    <string name="archive_day_and_time">%1$s, %2$s</string>
+
+    <string name="edit_new_title">Нова нотатка</string>
+    <string name="edit_title">Змінити</string>
+    <string name="edit_title_hint">Назва</string>
+    <string name="edit_title_empty">Торкніться, щоб ввести назву</string>
+    <string name="edit_time">Час</string>
+    <string name="edit_colour">Колір</string>
+    <string name="edit_colour_hint">Торкніться, щоб змінити колір</string>
+    <string name="edit_repeat">Повтор</string>
+    <string name="edit_save">Зберегти</string>
+    <string name="edit_create">Створити</string>
+    <string name="edit_section_details">Деталі</string>
+    <string name="edit_section_timing">Час</string>
+
+    <string name="time_title">Час</string>
+    <string name="time_now">Зараз</string>
+    <string name="time_30_minutes">Через 30 хвилин</string>
+    <string name="time_1_hour">Через 1 годину</string>
+    <string name="time_pick">Обрати час</string>
+    <string name="time_keep">Залишити %1$s</string>
+
+    <string name="repeat_title">Повтор</string>
+    <string name="repeat_none">Не повторювати</string>
+    <string name="repeat_hourly">Щогодини</string>
+    <string name="repeat_daily">Щодня</string>
+    <string name="repeat_weekly">Щотижня</string>
+    <string name="repeat_monthly">Щомісяця</string>
+    <string name="repeat_yearly">Щороку</string>
+    <string name="repeat_interval">Інтервал</string>
+    <plurals name="repeat_every_hours">
+        <item quantity="one">%1$d година</item>
+        <item quantity="few">%1$d години</item>
+        <item quantity="many">%1$d годин</item>
+        <item quantity="other">%1$d години</item>
+    </plurals>
+    <plurals name="repeat_every_days">
+        <item quantity="one">%1$d день</item>
+        <item quantity="few">%1$d дні</item>
+        <item quantity="many">%1$d днів</item>
+        <item quantity="other">%1$d дня</item>
+    </plurals>
+    <plurals name="repeat_every_weeks">
+        <item quantity="one">%1$d тиждень</item>
+        <item quantity="few">%1$d тижні</item>
+        <item quantity="many">%1$d тижнів</item>
+        <item quantity="other">%1$d тижня</item>
+    </plurals>
+    <plurals name="repeat_every_months">
+        <item quantity="one">%1$d місяць</item>
+        <item quantity="few">%1$d місяці</item>
+        <item quantity="many">%1$d місяців</item>
+        <item quantity="other">%1$d місяця</item>
+    </plurals>
+    <plurals name="repeat_every_years">
+        <item quantity="one">%1$d рік</item>
+        <item quantity="few">%1$d роки</item>
+        <item quantity="many">%1$d років</item>
+        <item quantity="other">%1$d року</item>
+    </plurals>
+    <string name="repeat_decrease">Зменшити інтервал</string>
+    <string name="repeat_increase">Збільшити інтервал</string>
+    <string name="repeat_days_of_week">Дні тижня</string>
+    <string name="repeat_summary_hourly">щогодини</string>
+    <string name="repeat_summary_daily">щодня</string>
+    <string name="repeat_summary_weekly">щотижня</string>
+    <string name="repeat_summary_monthly">щомісяця</string>
+    <string name="repeat_summary_yearly">щороку</string>
+    <plurals name="repeat_summary_every_hours">
+        <item quantity="one">кожну %1$d годину</item>
+        <item quantity="few">кожні %1$d години</item>
+        <item quantity="many">кожні %1$d годин</item>
+        <item quantity="other">кожні %1$d години</item>
+    </plurals>
+    <plurals name="repeat_summary_every_days">
+        <item quantity="one">кожен %1$d день</item>
+        <item quantity="few">кожні %1$d дні</item>
+        <item quantity="many">кожні %1$d днів</item>
+        <item quantity="other">кожні %1$d дня</item>
+    </plurals>
+    <plurals name="repeat_summary_every_weeks">
+        <item quantity="one">кожен %1$d тиждень</item>
+        <item quantity="few">кожні %1$d тижні</item>
+        <item quantity="many">кожні %1$d тижнів</item>
+        <item quantity="other">кожні %1$d тижня</item>
+    </plurals>
+    <plurals name="repeat_summary_every_months">
+        <item quantity="one">кожен %1$d місяць</item>
+        <item quantity="few">кожні %1$d місяці</item>
+        <item quantity="many">кожні %1$d місяців</item>
+        <item quantity="other">кожні %1$d місяця</item>
+    </plurals>
+    <plurals name="repeat_summary_every_years">
+        <item quantity="one">кожен %1$d рік</item>
+        <item quantity="few">кожні %1$d роки</item>
+        <item quantity="many">кожні %1$d років</item>
+        <item quantity="other">кожні %1$d року</item>
+    </plurals>
+
+    <string name="delete_confirm">Видалити це нагадування?</string>
+    <string name="cancel">Скасувати</string>
+    <string name="ok">OK</string>
+
+    <string name="notification_channel">Нагадування</string>
+    <string name="notification_channel_description">Нагадування, які годинник показує, коли телефон не підключено</string>
+    <string name="permission_needed">Дозвольте сповіщення, щоб нагадування показувалися, коли телефона немає поруч</string>
+
+    <string name="tile_empty">Немає майбутніх нагадувань</string>
+    <string name="tile_new">Нова</string>
+</resources>

@@ -18,6 +18,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.BasicText
+import androidx.compose.foundation.text.TextAutoSize
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Check
@@ -38,6 +40,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.wear.compose.material3.Button
 import androidx.wear.compose.material3.ButtonDefaults
 import androidx.wear.compose.material3.DatePicker
@@ -47,6 +50,7 @@ import androidx.wear.compose.material3.FilledTonalButton
 import androidx.wear.compose.material3.FilledTonalIconButton
 import androidx.wear.compose.material3.Icon
 import androidx.wear.compose.material3.IconButtonDefaults
+import androidx.wear.compose.material3.LocalContentColor
 import androidx.wear.compose.material3.MaterialTheme
 import androidx.wear.compose.material3.Text
 import androidx.wear.compose.material3.TextToggleButton
@@ -245,7 +249,12 @@ fun RepeatScreen(repetition: RepetitionData?, onConfirm: (RepetitionData?) -> Un
                     StepButton(painterResource(R.drawable.ic_remove), stringResource(R.string.repeat_decrease)) {
                         chosen = current.copy(number = (current.number - 1).coerceAtLeast(1))
                     }
-                    IntervalField(stringResource(R.string.repeat_interval), pluralStringResource(intervalPlural(current.repetition), current.number, current.number))
+                    IntervalField(
+                        stringResource(R.string.repeat_interval),
+                        pluralStringResource(intervalPlural(current.repetition), current.number, current.number),
+                        // What the buttons leave
+                        Modifier.weight(1f, fill = false),
+                    )
                     StepButton(rememberVectorPainter(Icons.Filled.Add), stringResource(R.string.repeat_increase)) {
                         chosen = current.copy(number = (current.number + 1).coerceAtMost(99))
                     }
@@ -276,7 +285,18 @@ fun RepeatScreen(repetition: RepetitionData?, onConfirm: (RepetitionData?) -> Un
                                 ),
                                 border = if (selected) null else BorderStroke(1.dp, MaterialTheme.colorScheme.outline),
                             ) {
-                                Text(Format.shortDay(day), fontWeight = if (selected) FontWeight.Bold else FontWeight.Medium)
+                                // Smaller for longer short names, such as Polish "niedz."
+                                val style = MaterialTheme.typography.labelMedium
+                                BasicText(
+                                    Format.shortDay(day),
+                                    modifier = Modifier.padding(horizontal = 3.dp),
+                                    style = style.copy(
+                                        fontWeight = if (selected) FontWeight.Bold else FontWeight.Medium,
+                                        color = LocalContentColor.current,
+                                    ),
+                                    maxLines = 1,
+                                    autoSize = TextAutoSize.StepBased(minFontSize = 8.sp, maxFontSize = style.fontSize),
+                                )
                             }
                         }
                     }
@@ -317,10 +337,13 @@ private fun StepButton(icon: Painter, description: String, onClick: () -> Unit) 
     }
 }
 
-/** The interval in an outlined box with its label on the border, like the phone app's text fields. */
+/**
+ * The interval in an outlined box with its label on the border, like the phone app's text fields. A long value (such
+ * as Italian "12 settimane") gets smaller rather than pushing the buttons off the screen.
+ */
 @Composable
-private fun IntervalField(label: String, value: String) {
-    Box(Modifier.padding(top = 7.dp)) {
+private fun IntervalField(label: String, value: String, modifier: Modifier = Modifier) {
+    Box(modifier.padding(top = 7.dp)) {
         Box(
             Modifier
                 .widthIn(min = 72.dp)
@@ -329,7 +352,13 @@ private fun IntervalField(label: String, value: String) {
                 .padding(horizontal = 10.dp),
             contentAlignment = Alignment.Center,
         ) {
-            Text(value, style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.SemiBold, maxLines = 1)
+            val style = MaterialTheme.typography.labelLarge
+            BasicText(
+                value,
+                style = style.copy(fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.onSurface),
+                maxLines = 1,
+                autoSize = TextAutoSize.StepBased(minFontSize = 9.sp, maxFontSize = style.fontSize),
+            )
         }
         Text(
             label,

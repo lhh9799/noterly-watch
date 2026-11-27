@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Follows the phone app's Spanish wording (noterly/lib/l10n/app_es.arb) where it fits the watch -->
+    <string name="complication_label">Próximo recordatorio</string>
+
+    <string name="list_empty">No hay recordatorios</string>
+    <string name="list_last_synced">Última sincronización: %1$s</string>
+    <string name="list_never_synced">Aún no se ha sincronizado con el teléfono</string>
+    <string name="list_archive">Archivo</string>
+    <string name="list_new">Nueva nota</string>
+    <string name="list_now">Ahora</string>
+    <string name="list_snoozed_until">Pospuesto hasta %1$s</string>
+    <string name="list_waiting_for_phone">Esperando al teléfono</string>
+    <string name="list_section_immediate">Aparición inmediata</string>
+    <string name="list_section_scheduled">Programados</string>
+    <string name="list_section_repeating">Repetitivos</string>
+    <string name="repeats">Se repite %1$s</string>
+
+    <string name="detail_done">Marcar como hecho</string>
+    <string name="detail_snooze">Posponer</string>
+    <string name="detail_edit">Editar</string>
+    <string name="detail_delete">Eliminar</string>
+    <string name="detail_restore">Restaurar</string>
+    <string name="detail_not_found">Este recordatorio ya no está en la lista</string>
+    <string name="detail_immediate">Aparición inmediata</string>
+
+    <string name="archive_title">Archivo</string>
+    <string name="archive_empty">Aún no has completado nada</string>
+    <string name="archive_archived">Archivado %1$s</string>
+    <string name="archive_today">hoy, %1$s</string>
+    <string name="archive_yesterday">ayer, %1$s</string>
+    <string name="archive_day_and_time">%1$s, %2$s</string>
+
+    <string name="edit_new_title">Nueva nota</string>
+    <string name="edit_title">Editar</string>
+    <string name="edit_title_hint">Título</string>
+    <string name="edit_title_empty">Toca para escribir un título</string>
+    <string name="edit_time">Hora</string>
+    <string name="edit_colour">Color</string>
+    <string name="edit_colour_hint">Toca para cambiar de color</string>
+    <string name="edit_repeat">Repetir</string>
+    <string name="edit_save">Guardar</string>
+    <string name="edit_create">Crear</string>
+    <string name="edit_section_details">Detalles</string>
+    <string name="edit_section_timing">Horario</string>
+
+    <string name="time_title">Hora</string>
+    <string name="time_now">Ahora</string>
+    <string name="time_30_minutes">En 30 minutos</string>
+    <string name="time_1_hour">En 1 hora</string>
+    <string name="time_pick">Elegir hora</string>
+    <string name="time_keep">Mantener %1$s</string>
+
+    <string name="repeat_title">Repetir</string>
+    <string name="repeat_none">No repetir</string>
+    <string name="repeat_hourly">Cada hora</string>
+    <string name="repeat_daily">Cada día</string>
+    <string name="repeat_weekly">Cada semana</string>
+    <string name="repeat_monthly">Cada mes</string>
+    <string name="repeat_yearly">Cada año</string>
+    <string name="repeat_interval">Cada</string>
+    <plurals name="repeat_every_hours">
+        <item quantity="one">%1$d hora</item>
+        <item quantity="many">%1$d horas</item>
+        <item quantity="other">%1$d horas</item>
+    </plurals>
+    <plurals name="repeat_every_days">
+        <item quantity="one">%1$d día</item>
+        <item quantity="many">%1$d días</item>
+        <item quantity="other">%1$d días</item>
+    </plurals>
+    <plurals name="repeat_every_weeks">
+        <item quantity="one">%1$d semana</item>
+        <item quantity="many">%1$d semanas</item>
+        <item quantity="other">%1$d semanas</item>
+    </plurals>
+    <plurals name="repeat_every_months">
+        <item quantity="one">%1$d mes</item>
+        <item quantity="many">%1$d meses</item>
+        <item quantity="other">%1$d meses</item>
+    </plurals>
+    <plurals name="repeat_every_years">
+        <item quantity="one">%1$d año</item>
+        <item quantity="many">%1$d años</item>
+        <item quantity="other">%1$d años</item>
+    </plurals>
+    <string name="repeat_decrease">Reducir intervalo</string>
+    <string name="repeat_increase">Aumentar intervalo</string>
+    <string name="repeat_days_of_week">Días de la semana</string>
+    <string name="repeat_summary_hourly">cada hora</string>
+    <string name="repeat_summary_daily">cada día</string>
+    <string name="repeat_summary_weekly">cada semana</string>
+    <string name="repeat_summary_monthly">cada mes</string>
+    <string name="repeat_summary_yearly">cada año</string>
+    <plurals name="repeat_summary_every_hours">
+        <item quantity="one">cada hora</item>
+        <item quantity="many">cada %1$d horas</item>
+        <item quantity="other">cada %1$d horas</item>
+    </plurals>
+    <plurals name="repeat_summary_every_days">
+        <item quantity="one">cada día</item>
+        <item quantity="many">cada %1$d días</item>
+        <item quantity="other">cada %1$d días</item>
+    </plurals>
+    <plurals name="repeat_summary_every_weeks">
+        <item quantity="one">cada semana</item>
+        <item quantity="many">cada %1$d semanas</item>
+        <item quantity="other">cada %1$d semanas</item>
+    </plurals>
+    <plurals name="repeat_summary_every_months">
+        <item quantity="one">cada mes</item>
+        <item quantity="many">cada %1$d meses</item>
+        <item quantity="other">cada %1$d meses</item>
+    </plurals>
+    <plurals name="repeat_summary_every_years">
+        <item quantity="one">cada año</item>
+        <item quantity="many">cada %1$d años</item>
+        <item quantity="other">cada %1$d años</item>
+    </plurals>
+
+    <string name="delete_confirm">¿Eliminar este recordatorio?</string>
+    <string name="cancel">Cancelar</string>
+    <string name="ok">Aceptar</string>
+
+    <string name="notification_channel">Recordatorios</string>
+    <string name="notification_channel_description">Recordatorios que muestra el reloj cuando el teléfono no está conectado</string>
+    <string name="permission_needed">Permite las notificaciones para que los recordatorios se muestren cuando el teléfono no esté cerca</string>
+
+    <string name="tile_empty">No hay recordatorios próximos</string>
+    <string name="tile_new">Nueva</string>
+</resources>

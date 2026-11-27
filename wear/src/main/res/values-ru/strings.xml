@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Follows the phone app's Russian wording (noterly/lib/l10n/app_ru.arb) where it fits the watch -->
+    <string name="complication_label">Следующее напоминание</string>
+
+    <string name="list_empty">Нет напоминаний</string>
+    <string name="list_last_synced">Последняя синхронизация: %1$s</string>
+    <string name="list_never_synced">Ещё не синхронизировано с телефоном</string>
+    <string name="list_archive">Архив</string>
+    <string name="list_new">Новая заметка</string>
+    <string name="list_now">Сейчас</string>
+    <string name="list_snoozed_until">Отложено до %1$s</string>
+    <string name="list_waiting_for_phone">Ожидание телефона</string>
+    <string name="list_section_immediate">Мгновенные</string>
+    <string name="list_section_scheduled">Запланированные</string>
+    <string name="list_section_repeating">Повторяющиеся</string>
+    <string name="repeats">Повторяется %1$s</string>
+
+    <string name="detail_done">Выполнено</string>
+    <string name="detail_snooze">Отложить</string>
+    <string name="detail_edit">Изменить</string>
+    <string name="detail_delete">Удалить</string>
+    <string name="detail_restore">Восстановить</string>
+    <string name="detail_not_found">Этого напоминания больше нет в списке</string>
+    <string name="detail_immediate">Мгновенно</string>
+
+    <string name="archive_title">Архив</string>
+    <string name="archive_empty">Пока ничего не выполнено</string>
+    <string name="archive_archived">В архиве %1$s</string>
+    <string name="archive_today">сегодня, %1$s</string>
+    <string name="archive_yesterday">вчера, %1$s</string>
+    <string name="archive_day_and_time">%1$s, %2$s</string>
+
+    <string name="edit_new_title">Новая заметка</string>
+    <string name="edit_title">Изменить</string>
+    <string name="edit_title_hint">Название</string>
+    <string name="edit_title_empty">Нажмите, чтобы ввести название</string>
+    <string name="edit_time">Время</string>
+    <string name="edit_colour">Цвет</string>
+    <string name="edit_colour_hint">Нажмите, чтобы сменить цвет</string>
+    <string name="edit_repeat">Повтор</string>
+    <string name="edit_save">Сохранить</string>
+    <string name="edit_create">Создать</string>
+    <string name="edit_section_details">Детали</string>
+    <string name="edit_section_timing">Время</string>
+
+    <string name="time_title">Время</string>
+    <string name="time_now">Сейчас</string>
+    <string name="time_30_minutes">Через 30 минут</string>
+    <string name="time_1_hour">Через 1 час</string>
+    <string name="time_pick">Выбрать время</string>
+    <string name="time_keep">Оставить %1$s</string>
+
+    <string name="repeat_title">Повтор</string>
+    <string name="repeat_none">Не повторять</string>
+    <string name="repeat_hourly">Каждый час</string>
+    <string name="repeat_daily">Каждый день</string>
+    <string name="repeat_weekly">Каждую неделю</string>
+    <string name="repeat_monthly">Каждый месяц</string>
+    <string name="repeat_yearly">Каждый год</string>
+    <string name="repeat_interval">Интервал</string>
+    <plurals name="repeat_every_hours">
+        <item quantity="one">%1$d час</item>
+        <item quantity="few">%1$d часа</item>
+        <item quantity="many">%1$d часов</item>
+        <item quantity="other">%1$d часа</item>
+    </plurals>
+    <plurals name="repeat_every_days">
+        <item quantity="one">%1$d день</item>
+        <item quantity="few">%1$d дня</item>
+        <item quantity="many">%1$d дней</item>
+        <item quantity="other">%1$d дня</item>
+    </plurals>
+    <plurals name="repeat_every_weeks">
+        <item quantity="one">%1$d неделя</item>
+        <item quantity="few">%1$d недели</item>
+        <item quantity="many">%1$d недель</item>
+        <item quantity="other">%1$d недели</item>
+    </plurals>
+    <plurals name="repeat_every_months">
+        <item quantity="one">%1$d месяц</item>
+        <item quantity="few">%1$d месяца</item>
+        <item quantity="many">%1$d месяцев</item>
+        <item quantity="other">%1$d месяца</item>
+    </plurals>
+    <plurals name="repeat_every_years">
+        <item quantity="one">%1$d год</item>
+        <item quantity="few">%1$d года</item>
+        <item quantity="many">%1$d лет</item>
+        <item quantity="other">%1$d года</item>
+    </plurals>
+    <string name="repeat_decrease">Уменьшить интервал</string>
+    <string name="repeat_increase">Увеличить интервал</string>
+    <string name="repeat_days_of_week">Дни недели</string>
+    <string name="repeat_summary_hourly">каждый час</string>
+    <string name="repeat_summary_daily">каждый день</string>
+    <string name="repeat_summary_weekly">каждую неделю</string>
+    <string name="repeat_summary_monthly">каждый месяц</string>
+    <string name="repeat_summary_yearly">каждый год</string>
+    <plurals name="repeat_summary_every_hours">
+        <item quantity="one">каждый %1$d час</item>
+        <item quantity="few">каждые %1$d часа</item>
+        <item quantity="many">каждые %1$d часов</item>
+        <item quantity="other">каждые %1$d часа</item>
+    </plurals>
+    <plurals name="repeat_summary_every_days">
+        <item quantity="one">каждый %1$d день</item>
+        <item quantity="few">каждые %1$d дня</item>
+        <item quantity="many">каждые %1$d дней</item>
+        <item quantity="other">каждые %1$d дня</item>
+    </plurals>
+    <plurals name="repeat_summary_every_weeks">
+        <item quantity="one">каждую %1$d неделю</item>
+        <item quantity="few">каждые %1$d недели</item>
+        <item quantity="many">каждые %1$d недель</item>
+        <item quantity="other">каждые %1$d недели</item>
+    </plurals>
+    <plurals name="repeat_summary_every_months">
+        <item quantity="one">каждый %1$d месяц</item>
+        <item quantity="few">каждые %1$d месяца</item>
+        <item quantity="many">каждые %1$d месяцев</item>
+        <item quantity="other">каждые %1$d месяца</item>
+    </plurals>
+    <plurals name="repeat_summary_every_years">
+        <item quantity="one">каждый %1$d год</item>
+        <item quantity="few">каждые %1$d года</item>
+        <item quantity="many">каждые %1$d лет</item>
+        <item quantity="other">каждые %1$d года</item>
+    </plurals>
+
+    <string name="delete_confirm">Удалить это напоминание?</string>
+    <string name="cancel">Отмена</string>
+    <string name="ok">ОК</string>
+
+    <string name="notification_channel">Напоминания</string>
+    <string name="notification_channel_description">Напоминания, которые часы показывают, когда телефон не подключён</string>
+    <string name="permission_needed">Разрешите уведомления, чтобы напоминания показывались, когда телефона нет рядом</string>
+
+    <string name="tile_empty">Нет предстоящих напоминаний</string>
+    <string name="tile_new">Новая</string>
+</resources>
