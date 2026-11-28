@@ -170,6 +170,14 @@ class WatchStateTest {
         assertEquals(128, parsed.rev)
         assertEquals(0xFFF44336, parsed.items.single().colour)
         assertTrue(parsed.items.single().repetitionData!!.hasWeekdays)
+        // This phone app follows the phone's language
+        assertNull(parsed.settings.language)
+    }
+
+    @Test
+    fun theSnapshotCarriesTheLanguagePickedForThePhoneApp() {
+        val json = """{"schema":1,"rev":3,"settings":{"snoozeSeconds":3600,"language":"en-GB"},"items":[],"appliedCommands":[]}"""
+        assertEquals("en-GB", WearJson.decodeFromString(Snapshot.serializer(), json).settings.language)
     }
 
     @Test

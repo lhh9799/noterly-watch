@@ -1,22 +1,31 @@
 package uk.co.tdsstudios.noterly.wear.ui
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
-import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.Refresh
+import androidx.compose.material.icons.outlined.Delete
+import androidx.compose.material.icons.outlined.Edit
+import androidx.compose.material.icons.outlined.Notifications
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.wear.compose.material3.Button
+import androidx.wear.compose.material3.ButtonDefaults
 import androidx.wear.compose.material3.FilledTonalButton
 import androidx.wear.compose.material3.Icon
 import androidx.wear.compose.material3.MaterialTheme
@@ -42,25 +51,36 @@ fun DetailScreen(
         return
     }
 
+    // When it is due, until when it is snoozed and how it repeats, one row each
+    val dateTime = DartTime.parseOrNull(note.dateTime)
+    val rows = buildList {
+        add(painterResource(R.drawable.ic_schedule) to (dateTime?.let { Format.time(context, it) } ?: stringResource(R.string.detail_immediate)))
+        DartTime.parseOrNull(note.snoozeDateTime)?.let { snoozed ->
+            add(painterResource(R.drawable.ic_snooze) to stringResource(R.string.list_snoozed_until, Format.time(context, snoozed)))
+        }
+        if (note.isRepeating) add(painterResource(R.drawable.ic_repeat) to stringResource(R.string.repeats, Format.repeatLabel(context, note)))
+    }
+
     ScrollingScreen {
         item {
-            Row(horizontalArrangement = Arrangement.spacedBy(6.dp), verticalAlignment = Alignment.CenterVertically) {
-                ColourDot(note.colour, 12.dp)
-                Text(note.title, style = MaterialTheme.typography.titleMedium, textAlign = TextAlign.Center)
+            Row(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.CenterVertically) {
+                ColourBadge(note.colour, 22.dp)
+                Text(note.title, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold, textAlign = TextAlign.Center)
             }
         }
         if (note.body.isNotBlank()) {
-            item { Text(note.body, style = MaterialTheme.typography.bodyMedium, modifier = Modifier.fillMaxWidth(), textAlign = TextAlign.Center) }
+            item {
+                Text(
+                    note.body,
+                    modifier = Modifier.fillMaxWidth().padding(bottom = 4.dp),
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    textAlign = TextAlign.Center,
+                )
+            }
         }
-        item {
-            val dateTime = DartTime.parseOrNull(note.dateTime)
-            CenteredNote(if (dateTime == null) stringResource(R.string.detail_immediate) else Format.time(context, dateTime))
-        }
-        DartTime.parseOrNull(note.snoozeDateTime)?.let { snoozed ->
-            item { CenteredNote(stringResource(R.string.list_snoozed_until, Format.time(context, snoozed))) }
-        }
-        if (note.isRepeating) {
-            item { CenteredNote(Format.repeatLabel(context, note)) }
+        rows.forEachIndexed { index, (icon, text) ->
+            item { DetailRow(icon, text, groupShape(index, rows.size)) }
         }
         if (waitingForPhone) {
             item { CenteredNote(stringResource(R.string.list_waiting_for_phone)) }
@@ -70,7 +90,7 @@ fun DetailScreen(
             item {
                 Button(
                     onClick = onRestore,
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier.fillMaxWidth().padding(top = 6.dp),
                     icon = { Icon(Icons.Filled.Refresh, contentDescription = null) },
                     label = { Text(stringResource(R.string.detail_restore)) },
                 )
@@ -79,16 +99,21 @@ fun DetailScreen(
             item {
                 Button(
                     onClick = onDone,
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier.fillMaxWidth().padding(top = 6.dp),
                     icon = { Icon(Icons.Filled.Check, contentDescription = null) },
                     label = { Text(stringResource(R.string.detail_done)) },
                 )
             }
             item {
-                FilledTonalButton(
+                Button(
                     onClick = onSnooze,
                     modifier = Modifier.fillMaxWidth(),
-                    icon = { Icon(Icons.Filled.Notifications, contentDescription = null) },
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = MaterialTheme.colorScheme.secondaryContainer,
+                        contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
+                        iconColor = MaterialTheme.colorScheme.onSecondaryContainer,
+                    ),
+                    icon = { Icon(Icons.Outlined.Notifications, contentDescription = null) },
                     label = { Text(stringResource(R.string.detail_snooze)) },
                 )
             }
@@ -96,7 +121,7 @@ fun DetailScreen(
                 FilledTonalButton(
                     onClick = { onEdit(note) },
                     modifier = Modifier.fillMaxWidth(),
-                    icon = { Icon(Icons.Filled.Edit, contentDescription = null) },
+                    icon = { Icon(Icons.Outlined.Edit, contentDescription = null) },
                     label = { Text(stringResource(R.string.detail_edit)) },
                 )
             }
@@ -105,7 +130,7 @@ fun DetailScreen(
             OutlinedButton(
                 onClick = onDelete,
                 modifier = Modifier.fillMaxWidth(),
-                icon = { Icon(Icons.Filled.Delete, contentDescription = null) },
+                icon = { Icon(Icons.Outlined.Delete, contentDescription = null) },
                 label = { Text(stringResource(R.string.detail_delete)) },
             )
         }
@@ -113,19 +138,48 @@ fun DetailScreen(
 }
 
 @Composable
+private fun DetailRow(icon: Painter, text: String, shape: Shape) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clip(shape)
+            .background(MaterialTheme.colorScheme.surfaceContainer)
+            .padding(horizontal = 14.dp, vertical = 8.dp),
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Icon(icon, contentDescription = null, modifier = Modifier.size(16.dp), tint = MaterialTheme.colorScheme.onSurfaceVariant)
+        Text(text, style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurface)
+    }
+}
+
+/**
+ * Asks before deleting, like the phone app's dialogs. It starts at the top, so both buttons are on screen even when
+ * their labels put them one under the other.
+ */
+@Composable
 fun DeleteScreen(onConfirm: () -> Unit, onCancel: () -> Unit) {
-    ScrollingScreen {
-        item { Text(stringResource(R.string.delete_confirm), textAlign = TextAlign.Center, modifier = Modifier.fillMaxWidth()) }
+    ScrollingScreen(startAtTop = true) {
         item {
-            Button(
-                onClick = onConfirm,
+            Icon(Icons.Outlined.Delete, contentDescription = null, modifier = Modifier.size(24.dp), tint = MaterialTheme.colorScheme.secondary)
+        }
+        item {
+            Text(
+                stringResource(R.string.delete_confirm),
                 modifier = Modifier.fillMaxWidth(),
-                icon = { Icon(Icons.Filled.Delete, contentDescription = null) },
-                label = { Text(stringResource(R.string.detail_delete)) },
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.Bold,
+                textAlign = TextAlign.Center,
             )
         }
         item {
-            OutlinedButton(onClick = onCancel, modifier = Modifier.fillMaxWidth(), label = { Text(stringResource(R.string.delete_cancel)) })
+            DialogActions(
+                onCancel = onCancel,
+                confirmLabel = stringResource(R.string.detail_delete),
+                onConfirm = onConfirm,
+                modifier = Modifier.padding(top = 8.dp),
+                confirmIcon = Icons.Outlined.Delete,
+            )
         }
     }
 }

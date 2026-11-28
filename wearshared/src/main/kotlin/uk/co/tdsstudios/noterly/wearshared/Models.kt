@@ -60,6 +60,12 @@ data class SnapshotSettings(
     val snoozeSeconds: Long = 3600,
     val dismissibleEnabled: Boolean = true,
     val dismissibleByDefault: Boolean = false,
+    /**
+     * The language picked for the phone app in Android's settings, as a BCP 47 tag such as "ko" or "en-GB", which the
+     * watch app then shows too. Null when the phone app follows the phone's language (or is too old to send it): the
+     * watch app then follows the watch's language, which a Galaxy Watch takes from the phone.
+     */
+    val language: String? = null,
 )
 
 @Serializable

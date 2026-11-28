@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- US spelling, like the phone app's app_en-US.arb; everything else comes from values (British English) -->
+    <string name="edit_colour">Color</string>
+    <string name="edit_colour_hint">Tap for another color</string>
+</resources>

@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Follows the phone app's Polish wording (noterly/lib/l10n/app_pl.arb) where it fits the watch -->
+    <string name="complication_label">Następne przypomnienie</string>
+
+    <string name="list_empty">Brak przypomnień</string>
+    <string name="list_last_synced">Ostatnia synchronizacja: %1$s</string>
+    <string name="list_never_synced">Jeszcze nie zsynchronizowano z telefonem</string>
+    <string name="list_archive">Archiwum</string>
+    <string name="list_new">Nowa notatka</string>
+    <string name="list_now">Teraz</string>
+    <string name="list_snoozed_until">Odłożone do %1$s</string>
+    <string name="list_waiting_for_phone">Oczekiwanie na telefon</string>
+    <string name="list_section_immediate">Wyświetlane od razu</string>
+    <string name="list_section_scheduled">Zaplanowane</string>
+    <string name="list_section_repeating">Powtarzające się</string>
+    <string name="repeats">Powtarzanie: %1$s</string>
+
+    <string name="detail_done">Oznacz jako wykonane</string>
+    <string name="detail_snooze">Odłóż</string>
+    <string name="detail_edit">Edytuj</string>
+    <string name="detail_delete">Usuń</string>
+    <string name="detail_restore">Przywróć</string>
+    <string name="detail_not_found">Tego przypomnienia nie ma już na liście</string>
+    <string name="detail_immediate">Wyświetlane od razu</string>
+
+    <string name="archive_title">Archiwum</string>
+    <string name="archive_empty">Nic jeszcze nie wykonano</string>
+    <string name="archive_archived">Zarchiwizowano %1$s</string>
+    <string name="archive_today">dzisiaj, %1$s</string>
+    <string name="archive_yesterday">wczoraj, %1$s</string>
+    <string name="archive_day_and_time">%1$s, %2$s</string>
+
+    <string name="edit_new_title">Nowa notatka</string>
+    <string name="edit_title">Edytuj</string>
+    <string name="edit_title_hint">Tytuł</string>
+    <string name="edit_title_empty">Dotknij, aby wpisać tytuł</string>
+    <string name="edit_time">Godzina</string>
+    <string name="edit_colour">Kolor</string>
+    <string name="edit_colour_hint">Dotknij, aby zmienić kolor</string>
+    <string name="edit_repeat">Powtarzanie</string>
+    <string name="edit_save">Zapisz</string>
+    <string name="edit_create">Utwórz</string>
+    <string name="edit_section_details">Szczegóły</string>
+    <string name="edit_section_timing">Czas</string>
+
+    <string name="time_title">Godzina</string>
+    <string name="time_now">Teraz</string>
+    <string name="time_30_minutes">Za 30 minut</string>
+    <string name="time_1_hour">Za 1 godzinę</string>
+    <string name="time_pick">Wybierz godzinę</string>
+    <string name="time_keep">Zachowaj %1$s</string>
+
+    <string name="repeat_title">Powtarzanie</string>
+    <string name="repeat_none">Nie powtarzaj</string>
+    <string name="repeat_hourly">Co godzinę</string>
+    <string name="repeat_daily">Codziennie</string>
+    <string name="repeat_weekly">Co tydzień</string>
+    <string name="repeat_monthly">Co miesiąc</string>
+    <string name="repeat_yearly">Co rok</string>
+    <string name="repeat_interval">Odstęp</string>
+    <plurals name="repeat_every_hours">
+        <item quantity="one">%1$d godzina</item>
+        <item quantity="few">%1$d godziny</item>
+        <item quantity="many">%1$d godzin</item>
+        <item quantity="other">%1$d godziny</item>
+    </plurals>
+    <plurals name="repeat_every_days">
+        <item quantity="one">%1$d dzień</item>
+        <item quantity="few">%1$d dni</item>
+        <item quantity="many">%1$d dni</item>
+        <item quantity="other">%1$d dnia</item>
+    </plurals>
+    <plurals name="repeat_every_weeks">
+        <item quantity="one">%1$d tydzień</item>
+        <item quantity="few">%1$d tygodnie</item>
+        <item quantity="many">%1$d tygodni</item>
+        <item quantity="other">%1$d tygodnia</item>
+    </plurals>
+    <plurals name="repeat_every_months">
+        <item quantity="one">%1$d miesiąc</item>
+        <item quantity="few">%1$d miesiące</item>
+        <item quantity="many">%1$d miesięcy</item>
+        <item quantity="other">%1$d miesiąca</item>
+    </plurals>
+    <plurals name="repeat_every_years">
+        <item quantity="one">%1$d rok</item>
+        <item quantity="few">%1$d lata</item>
+        <item quantity="many">%1$d lat</item>
+        <item quantity="other">%1$d roku</item>
+    </plurals>
+    <string name="repeat_decrease">Zmniejsz odstęp</string>
+    <string name="repeat_increase">Zwiększ odstęp</string>
+    <string name="repeat_days_of_week">Dni tygodnia</string>
+    <string name="repeat_summary_hourly">co godzinę</string>
+    <string name="repeat_summary_daily">codziennie</string>
+    <string name="repeat_summary_weekly">co tydzień</string>
+    <string name="repeat_summary_monthly">co miesiąc</string>
+    <string name="repeat_summary_yearly">co rok</string>
+    <plurals name="repeat_summary_every_hours">
+        <item quantity="one">co godzinę</item>
+        <item quantity="few">co %1$d godziny</item>
+        <item quantity="many">co %1$d godzin</item>
+        <item quantity="other">co %1$d godziny</item>
+    </plurals>
+    <plurals name="repeat_summary_every_days">
+        <item quantity="one">codziennie</item>
+        <item quantity="few">co %1$d dni</item>
+        <item quantity="many">co %1$d dni</item>
+        <item quantity="other">co %1$d dnia</item>
+    </plurals>
+    <plurals name="repeat_summary_every_weeks">
+        <item quantity="one">co tydzień</item>
+        <item quantity="few">co %1$d tygodnie</item>
+        <item quantity="many">co %1$d tygodni</item>
+        <item quantity="other">co %1$d tygodnia</item>
+    </plurals>
+    <plurals name="repeat_summary_every_months">
+        <item quantity="one">co miesiąc</item>
+        <item quantity="few">co %1$d miesiące</item>
+        <item quantity="many">co %1$d miesięcy</item>
+        <item quantity="other">co %1$d miesiąca</item>
+    </plurals>
+    <plurals name="repeat_summary_every_years">
+        <item quantity="one">co rok</item>
+        <item quantity="few">co %1$d lata</item>
+        <item quantity="many">co %1$d lat</item>
+        <item quantity="other">co %1$d roku</item>
+    </plurals>
+
+    <string name="delete_confirm">Usunąć to przypomnienie?</string>
+    <string name="cancel">Anuluj</string>
+    <string name="ok">OK</string>
+
+    <string name="notification_channel">Przypomnienia</string>
+    <string name="notification_channel_description">Przypomnienia wyświetlane przez zegarek, gdy telefon nie jest połączony</string>
+    <string name="permission_needed">Zezwól na powiadomienia, aby przypomnienia wyświetlały się, gdy telefonu nie ma w pobliżu</string>
+
+    <string name="tile_empty">Brak nadchodzących przypomnień</string>
+    <string name="tile_new">Nowa</string>
+</resources>
