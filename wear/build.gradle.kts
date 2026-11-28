@@ -38,8 +38,8 @@ android {
         applicationId = "uk.co.tdsstudios.noterly"
         minSdk = 36 // Wear OS 6, Galaxy Watch 8 only
         targetSdk = 36
-        versionCode = 3
-        versionName = "1.1.0"
+        versionCode = 4
+        versionName = "1.2.0"
     }
 
     signingConfigs {
