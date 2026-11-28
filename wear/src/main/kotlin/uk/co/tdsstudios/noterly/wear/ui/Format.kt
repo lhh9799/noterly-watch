@@ -35,6 +35,24 @@ object Format {
         return DateTimeFormatter.ofPattern(DateFormat.getBestDateTimePattern(locale, skeleton), locale).format(dateTime)
     }
 
+    /**
+     * For the tile, beside a reminder's title: "14:30" today, "Fri 14:30" within a week either way (overdue too),
+     * otherwise "21 Oct". [time]'s full date would leave no room for the title.
+     */
+    fun compactTime(context: Context, dateTime: LocalDateTime): String {
+        val days = Math.abs(ChronoUnit.DAYS.between(LocalDate.now(), dateTime.toLocalDate()))
+        val locale = Locale.getDefault()
+        fun format(skeleton: String) =
+            DateTimeFormatter.ofPattern(DateFormat.getBestDateTimePattern(locale, skeleton), locale).format(dateTime)
+        val clock = format(if (DateFormat.is24HourFormat(context)) "Hm" else "hm")
+        return when {
+            days == 0L -> clock
+            // Day and time side by side: the best pattern for both puts the Korean day in brackets
+            days < 7 -> "${format("EEE")} $clock"
+            else -> format("dMMM")
+        }
+    }
+
     fun clock(context: Context, millis: Long): String =
         time(context, DartTime.fromInstant(java.time.Instant.ofEpochMilli(millis)))
 

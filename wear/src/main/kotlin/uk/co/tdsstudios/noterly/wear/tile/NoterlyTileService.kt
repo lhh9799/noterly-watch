@@ -102,7 +102,7 @@ class NoterlyTileService : TileService() {
     private fun MaterialScope.row(item: NoteItem, index: Int, count: Int): LayoutElementBuilders.LayoutElement {
         val top = if (index == 0) ROW_OUTER_RADIUS else ROW_INNER_RADIUS
         val bottom = if (index == count - 1) ROW_OUTER_RADIUS else ROW_INNER_RADIUS
-        val due = WatchState.nextDue(item)?.let { Format.time(this@NoterlyTileService, it) } ?: getString(R.string.list_now)
+        val due = WatchState.nextDue(item)?.let { Format.compactTime(this@NoterlyTileService, it) } ?: getString(R.string.list_now)
         val shape = LayoutModifier.background(colorScheme.surfaceContainer)
             .clipTopLeft(top, top).clipTopRight(top, top).clipBottomLeft(bottom, bottom).clipBottomRight(bottom, bottom)
             .padding(start = 10f, top = 0f, end = 12f, bottom = 0f, rtlAware = true)
